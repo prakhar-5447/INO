@@ -2,13 +2,12 @@ import {StyleSheet, Text, Button, View} from 'react-native';
 import React, {useContext} from 'react';
 import auth from '@react-native-firebase/auth';
 import {AuthContext} from '../auth/AuthProvider';
-import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Login from '../auth/Login';
 import Signup from '../auth/Signup';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-const Tab = createMaterialBottomTabNavigator();
-
+const Tab = createBottomTabNavigator();
 const Profile = () => {
   const logOut = () => {
     auth()
@@ -27,30 +26,29 @@ const Profile = () => {
 
   return (
     <Tab.Navigator
-      initialRouteName="Profile"
-      activeColor="#e91e63"
-      barStyle={{backgroundColor: 'tomato'}}>
-      <Tab.Screen
-        name="myProfile"
-        component={Login}
-        options={{
-          tabBarLabel: 'Profile',
-          tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="home" color={color} size={26} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="findProfile"
-        component={Signup}
-        options={{
-          tabBarLabel: 'Find',
-          tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="bell" color={color} size={26} />
-          ),
-        }}
-      />
-        </Tab.Navigator>
+      screenOptions={({route}) => ({
+        tabBarIcon: ({focused, size, color}) => {
+          let iconName;
+          if (route.name === 'User') {
+            iconName = 'autoprefixer';
+            size = focused ? 20 : 15;
+            color = focused ? 'black' : 'gray';
+          } else if (route.name === 'Find') {
+            iconName = 'searchengin';
+            size = focused ? 20 : 15;
+            color = focused ? 'black' : 'gray';
+          }
+          return (
+            <FontAwesome5
+              name={iconName}
+              size={size}
+              color={color}></FontAwesome5>
+          );
+        },
+      })}>
+      <Tab.Screen name="User" component={Login} />
+      <Tab.Screen name="Find" component={Signup} />
+    </Tab.Navigator>
   );
 };
 export default Profile;
