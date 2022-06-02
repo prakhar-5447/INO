@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "559163273161",
+    "project_id": "ino-app-20b90",
+    "storage_bucket": "ino-app-20b90.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:559163273161:android:cf6da9841df6ace4f54218",
+        "android_client_info": {
+          "package_name": "com.ino"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "559163273161-h4ap5d8h84aoq7b8lbvk8j9nmqhtef13.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0JJu6kOLmaYJ9oBi374QYxjOjNnYxJlE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "559163273161-h4ap5d8h84aoq7b8lbvk8j9nmqhtef13.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
