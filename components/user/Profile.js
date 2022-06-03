@@ -3,9 +3,9 @@ import React, {useContext} from 'react';
 import auth from '@react-native-firebase/auth';
 import {AuthContext} from '../auth/AuthProvider';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Login from '../auth/Login';
-import Signup from '../auth/Signup';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import User from './User';
+import Search from './Search';
 
 const Tab = createBottomTabNavigator();
 const Profile = () => {
@@ -30,7 +30,7 @@ const Profile = () => {
         tabBarIcon: ({focused, size, color}) => {
           let iconName;
           if (route.name === 'User') {
-            iconName = 'autoprefixer';
+            iconName = 'user';
             size = focused ? 20 : 15;
             color = focused ? 'black' : 'gray';
           } else if (route.name === 'Find') {
@@ -46,8 +46,8 @@ const Profile = () => {
           );
         },
       })}>
-      <Tab.Screen name="User" component={Login} />
-      <Tab.Screen name="Find" component={Signup} />
+      <Tab.Screen name="User" component={User} />
+      <Tab.Screen name="Find" component={Search} />
     </Tab.Navigator>
   );
 };

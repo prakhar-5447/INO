@@ -1,5 +1,4 @@
 import org.apache.tools.ant.taskdefs.condition.Os
-apply plugin: 'com.google.gms.google-services'
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
@@ -53,3 +52,5 @@ allprojects {
         maven { url 'https://www.jitpack.io' }
     }
 }
+
+apply plugin: 'com.google.gms.google-services'
