@@ -1,4 +1,9 @@
-import {StyleSheet, Text, Button, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  Button,
+  View,
+} from 'react-native';
 import React, {useContext} from 'react';
 import auth from '@react-native-firebase/auth';
 import {AuthContext} from '../auth/AuthProvider';
@@ -46,8 +51,8 @@ const Profile = () => {
           );
         },
       })}>
-      <Tab.Screen name="User" component={User} />
-      <Tab.Screen name="Find" component={Search} />
+        <Tab.Screen name="User" component={User} />
+        <Tab.Screen name="Find" component={Search} />
     </Tab.Navigator>
   );
 };

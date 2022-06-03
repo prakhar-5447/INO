@@ -20,7 +20,8 @@ const Signup = ({navigation}) => {
           .doc(user.uid)
           .set({
             email: user.email,
-            uid: user.uid,
+            phoneNumber: phoneNumber,
+            displayName: displayName,
           })
           .then(() => {
             console.log('User added!');
@@ -35,10 +36,17 @@ const Signup = ({navigation}) => {
   const {setUser} = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [displayName, setDisplayName] = useState('');
   return (
     <View style={styles.body}>
       <View style={styles.signup}>
-        <TextInput name="name" style={[styles.input]} placeholder={'Name'} />
+        <TextInput
+          value={displayName}
+          style={styles.input}
+          onChangeText={text => setDisplayName(text)}
+          placeholder={'Name'}
+        />
         <TextInput
           value={email}
           style={[styles.input]}
@@ -50,6 +58,12 @@ const Signup = ({navigation}) => {
           style={styles.input}
           onChangeText={text => setPassword(text)}
           placeholder={'Password'}
+        />
+        <TextInput
+          value={phoneNumber}
+          style={styles.input}
+          onChangeText={text => setPhoneNumber(text)}
+          placeholder={'Phone Number'}
         />
         <Button title="Signup" style={styles.button} onPress={signup_auth} />
       </View>

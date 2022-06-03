@@ -21,8 +21,8 @@ const Login = ({navigation}) => {
       });
   };
   const {setUser} = useContext(AuthContext);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('sahuprakhar022003@gmail.com');
+  const [password, setPassword] = useState('jayomsahu2003');
   return (
     <View style={styles.body}>
       <View style={styles.login}>
