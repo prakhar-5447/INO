@@ -1,6 +1,8 @@
 import {StyleSheet, Text, View, Button, TextInput} from 'react-native';
 import React, {useState, useContext} from 'react';
 import {AuthContext} from './AuthProvider';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 const Signup = ({navigation}) => {
   const signup_auth = () => {
@@ -13,8 +15,19 @@ const Signup = ({navigation}) => {
         navigation.replace('Profile');
         console.log('logged in with :', user.email);
         console.log(user);
+        firestore()
+          .collection('Users')
+          .doc(user.uid)
+          .set({
+            email: user.email,
+            uid: user.uid,
+          })
+          .then(() => {
+            console.log('User added!');
+          });
       })
       .catch(error => {
+        console.log('User!');
         const errorCode = error.code;
         alert(error.message);
       });
