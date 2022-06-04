@@ -12,7 +12,6 @@ import firestore from '@react-native-firebase/firestore';
 import React, {useContext, useState, useEffect} from 'react';
 import {AuthContext} from '../auth/AuthProvider';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {shadow} from 'react-native-paper';
 
 const User = () => {
   const {user} = useContext(AuthContext);
@@ -24,6 +23,7 @@ const User = () => {
     phoneNumber: '',
   });
   const [socials, setSocials] = useState([]);
+
   const click = async () => {
     const userData = await firestore().collection('Users').doc(user.uid).get();
     // console.log(userData._data);
@@ -49,7 +49,6 @@ const User = () => {
   };
 
   const deleteSocial = e => {
-    console.log(e + ' deleted');
     firestore()
       .collection('Users')
       .doc(user.uid)
