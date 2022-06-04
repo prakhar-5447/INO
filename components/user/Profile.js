@@ -1,9 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  Button,
-  View,
-} from 'react-native';
+import {StyleSheet, Text, Button, View} from 'react-native';
 import React, {useContext} from 'react';
 import auth from '@react-native-firebase/auth';
 import {AuthContext} from '../auth/AuthProvider';
@@ -11,6 +6,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import User from './User';
 import Search from './Search';
+import Project from './Project';
 
 const Tab = createBottomTabNavigator();
 const Profile = () => {
@@ -42,6 +38,10 @@ const Profile = () => {
             iconName = 'searchengin';
             size = focused ? 20 : 15;
             color = focused ? 'black' : 'gray';
+          } else if (route.name === 'Project') {
+            iconName = 'briefcase';
+            size = focused ? 20 : 15;
+            color = focused ? 'black' : 'gray';
           }
           return (
             <FontAwesome5
@@ -51,8 +51,9 @@ const Profile = () => {
           );
         },
       })}>
-        <Tab.Screen name="User" component={User} />
-        <Tab.Screen name="Find" component={Search} />
+      <Tab.Screen name="User" component={User} />
+      <Tab.Screen name="Find" component={Search} />
+      <Tab.Screen name="Project" component={Project} />
     </Tab.Navigator>
   );
 };
