@@ -104,9 +104,9 @@ const Project = () => {
           .doc(user.uid)
           .update({
             project: firestore.FieldValue.arrayUnion({
-              title: title,
-              link: link,
-              desc: desc,
+              title: title.trim(),
+              link: link.trim(),
+              desc: desc.trim(),
               imageUri: `https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2F${user.uid}%2F${filePath[0].name}?alt=media`,
             }),
           })
@@ -251,7 +251,7 @@ const Project = () => {
                   style={[
                     {
                       fontSize: 18,
-                      paddingHorizontal: 2,
+                      padding: 6,
                       textAlign: 'center',
                       backgroundColor: 'lightgray',
                     },

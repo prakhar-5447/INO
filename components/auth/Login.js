@@ -1,4 +1,11 @@
-import {StyleSheet, Text, View, Button, TextInput} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useState, useContext} from 'react';
 import auth from '@react-native-firebase/auth';
 import {AuthContext} from './AuthProvider';
@@ -39,9 +46,34 @@ const Login = ({navigation}) => {
           onChangeText={text => setPassword(text)}
           placeholder={'Password'}
         />
-        <Button title="Login" style={styles.button} onPress={login_auth} />
       </View>
-      <View style={styles.signup}>
+      <View style={styles.login}>
+        <View style={[{alignItems: 'center'}]}>
+          <TouchableOpacity
+            style={[
+              {
+                backgroundColor:
+                  email === '' || password === '' ? 'transparent' : 'blue',
+                borderRadius: 5,
+                borderColor:
+                  email === '' || password === '' ? 'gray' : 'lightblue',
+                borderWidth: 1,
+                paddingVertical: 8,
+                paddingHorizontal: 40,
+              },
+            ]}
+            onPress={login_auth}>
+            <Text
+              style={[
+                {
+                  color: email === '' || password === '' ? 'blue' : 'white',
+                  fontSize: 20,
+                },
+              ]}>
+              Log in
+            </Text>
+          </TouchableOpacity>
+        </View>
         <Text
           style={[styles.button, styles.text]}
           onPress={() => {
@@ -57,9 +89,19 @@ const Login = ({navigation}) => {
 export default Login;
 
 const styles = StyleSheet.create({
-  login: {textAlign: 'center'},
+  body: {
+    paddingHorizontal: 20,
+  },
+  login: {textAlign: 'center', marginVertical: 15},
   signup: {padding: 5},
-  input: {padding: 10, marginVertical: 5},
+  input: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderColor: 'black',
+    borderWidth: 1,
+    margin: 5,
+    fontSize: 16,
+  },
 
   text: {
     color: 'blue',
@@ -67,5 +109,6 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     textAlign: 'center',
     fontSize: 20,
+    marginTop: 10,
   },
 });

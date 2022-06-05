@@ -3,6 +3,7 @@ import React, {useState, useContext} from 'react';
 import {AuthContext} from './AuthProvider';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const Signup = ({navigation}) => {
   const signup_auth = () => {
@@ -22,6 +23,9 @@ const Signup = ({navigation}) => {
             email: user.email,
             phoneNumber: phoneNumber,
             displayName: displayName,
+            uid: user.uid,
+            profilePhoto:
+              'https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2Fdefault.png?alt=media',
           })
           .then(() => {
             console.log('User added!');
@@ -66,7 +70,48 @@ const Signup = ({navigation}) => {
           onChangeText={text => setPhoneNumber(text)}
           placeholder={'Phone Number'}
         />
-        <Button title="Signup" style={styles.button} onPress={signup_auth} />
+      </View>
+      <View style={[{alignItems: 'center'}]}>
+        <TouchableOpacity
+          style={[
+            {
+              backgroundColor:
+                email === '' ||
+                password === '' ||
+                phoneNumber === '' ||
+                email === ''
+                  ? 'transparent'
+                  : 'blue',
+              borderRadius: 5,
+              borderColor:
+                email === '' ||
+                password === '' ||
+                phoneNumber === '' ||
+                displayName === ''
+                  ? 'gray'
+                  : 'lightblue',
+              borderWidth: 1,
+              paddingVertical: 8,
+              paddingHorizontal: 40,
+            },
+          ]}
+          onPress={signup_auth}>
+          <Text
+            style={[
+              {
+                color:
+                  email === '' ||
+                  password === '' ||
+                  phoneNumber === '' ||
+                  displayName === ''
+                    ? 'blue'
+                    : 'white',
+                fontSize: 20,
+              },
+            ]}>
+            Sign up
+          </Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.login}>
         <Text
@@ -84,14 +129,26 @@ const Signup = ({navigation}) => {
 export default Signup;
 
 const styles = StyleSheet.create({
-  login: {textAlign: 'center'},
-  signup: {padding: 5},
-  input: {padding: 10, marginVertical: 5},
+  body: {
+    paddingHorizontal: 20,
+  },
+  signup: {textAlign: 'center', marginVertical: 15},
+  login: {padding: 5},
+  input: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderColor: 'black',
+    borderWidth: 1,
+    margin: 5,
+    fontSize: 16,
+  },
+
   text: {
     color: 'blue',
     justifyContent: 'center',
     alignContent: 'center',
     textAlign: 'center',
     fontSize: 20,
+    marginTop: 10,
   },
 });

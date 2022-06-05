@@ -12,9 +12,9 @@ import {
 import React, {useState} from 'react';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const Search = () => {
-  const [search, setSearch] = useState('');
   const [allId, setAllId] = useState([]);
 
   const find = e => {
@@ -39,6 +39,15 @@ const Search = () => {
       });
   };
 
+  function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
   return (
     <View>
       <View style={[{alignItems: 'center', margin: 10}]}>
@@ -46,7 +55,8 @@ const Search = () => {
           <TextInput
             style={[styles.input, {flex: 1}]}
             onChangeText={text => {
-              find(text.trim());
+              find('prakhar');
+              // find(text.trim());
             }}
             placeholder={'Enter name'}
           />
@@ -63,13 +73,71 @@ const Search = () => {
           {allId &&
             allId.map((e, i) => {
               return (
-                <View key={i}>
+                <View
+                  key={i}
+                  style={[
+                    {
+                      marginVertical: 8,
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      borderWidth: 1,
+                      borderColor: getRandomColor(),
+                      backgroundColor: 'white',
+                      borderTopLeftRadius: 100,
+                      borderBottomLeftRadius: 100,
+                    },
+                  ]}>
                   <Image
-                    style={[{width: 100, height: 100, borderRadius: 100}]}
+                    style={[{width: 80, height: 80, borderRadius: 100}]}
                     source={{uri: e.profilePhoto}}
                   />
-                  <Text>{e.displayName}</Text>
-                  <Text>{e.uid}</Text>
+                  <View
+                    style={[
+                      {
+                        alignItems: 'flex-end',
+                        justifyContent: 'space-between',
+                        paddingRight: 8,
+                        marginBottom: 4,
+                      },
+                    ]}>
+                    <View
+                      style={[
+                        {
+                          alignItems: 'flex-end',
+                        },
+                      ]}>
+                      <Text
+                        style={[{fontSize: 26, textTransform: 'uppercase'}]}>
+                        {e.displayName}
+                      </Text>
+                      <Text style={[{fontSize: 12}]}>{e.uid}</Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => {
+                        console.log('skk');
+                      }}
+                      style={[
+                        {
+                          flexDirection: 'row',
+                          justifyContent: 'center',
+                        },
+                      ]}>
+                      <Text
+                        style={[
+                          {
+                            fontSize: 12,
+                            marginHorizontal: 2,
+                            color: 'blue',
+                          },
+                        ]}>
+                        Know more
+                      </Text>
+                      <FontAwesome5
+                        name={'angle-right'}
+                        size={16}
+                        color={'blue'}></FontAwesome5>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               );
             })}
