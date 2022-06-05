@@ -69,8 +69,8 @@ const Signup = ({navigation}) => {
           onChangeText={text => setPhoneNumber(text)}
           placeholder={'Phone Number'}
         />
-        <Button title="Signup" style={styles.button} onPress={signup_auth} />
       </View>
+      <Button title="Signup" style={styles.button} onPress={signup_auth} />
       <View style={styles.login}>
         <Text
           style={[styles.button, styles.text]}
@@ -87,14 +87,26 @@ const Signup = ({navigation}) => {
 export default Signup;
 
 const styles = StyleSheet.create({
-  login: {textAlign: 'center'},
-  signup: {padding: 5},
-  input: {padding: 10, marginVertical: 5},
+  body: {
+    paddingHorizontal: 20,
+  },
+  signup: {textAlign: 'center', marginVertical: 15},
+  login: {padding: 5},
+  input: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderColor: 'black',
+    borderWidth: 1,
+    margin: 5,
+    fontSize: 16,
+  },
+
   text: {
     color: 'blue',
     justifyContent: 'center',
     alignContent: 'center',
     textAlign: 'center',
     fontSize: 20,
+    marginTop: 10,
   },
 });

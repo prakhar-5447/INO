@@ -39,9 +39,9 @@ const Login = ({navigation}) => {
           onChangeText={text => setPassword(text)}
           placeholder={'Password'}
         />
-        <Button title="Login" style={styles.button} onPress={login_auth} />
       </View>
       <View style={styles.signup}>
+        <Button title="Login" style={styles.button} onPress={login_auth} />
         <Text
           style={[styles.button, styles.text]}
           onPress={() => {
@@ -57,9 +57,19 @@ const Login = ({navigation}) => {
 export default Login;
 
 const styles = StyleSheet.create({
-  login: {textAlign: 'center'},
+  body: {
+    paddingHorizontal: 20,
+  },
+  login: {textAlign: 'center', marginVertical: 15},
   signup: {padding: 5},
-  input: {padding: 10, marginVertical: 5},
+  input: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderColor: 'black',
+    borderWidth: 1,
+    margin: 5,
+    fontSize: 16,
+  },
 
   text: {
     color: 'blue',
@@ -67,5 +77,6 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     textAlign: 'center',
     fontSize: 20,
+    marginTop:10
   },
 });
