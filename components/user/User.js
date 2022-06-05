@@ -68,23 +68,25 @@ const User = () => {
   return (
     <View styles={styles.body}>
       <View style={styles.info}>
+        <View style={[styles.id]}>
+          <Text>ID : </Text>
+          <Text selectable={true}>{user.uid}</Text>
+        </View>
         <Text style={[styles.text, styles.name]}>{profile.displayName}</Text>
-        <View style={styles.details}>
-          <View style={styles.detail}>
-            <FontAwesome5
-              name={'envelope'}
-              size={18}
-              color={'black'}></FontAwesome5>
-            <Text style={styles.text}>{profile.email}</Text>
-          </View>
-          <View style={styles.detail}>
-            <FontAwesome5
-              name={'mobile'}
-              style={{marginLeft: 3}}
-              size={20}
-              color={'black'}></FontAwesome5>
-            <Text style={styles.text}>{profile.phoneNumber}</Text>
-          </View>
+        <View style={styles.detail}>
+          <FontAwesome5
+            name={'envelope'}
+            size={18}
+            color={'black'}></FontAwesome5>
+          <Text style={styles.text}>{profile.email}</Text>
+        </View>
+        <View style={styles.detail}>
+          <FontAwesome5
+            name={'mobile'}
+            style={{marginLeft: 3}}
+            size={20}
+            color={'black'}></FontAwesome5>
+          <Text style={styles.text}>{profile.phoneNumber}</Text>
         </View>
       </View>
       <View style={[{flexDirection: 'row', marginVertical: 16}]}>
@@ -122,7 +124,10 @@ const User = () => {
           <FontAwesome5 name={'check'} size={16} color={'black'}></FontAwesome5>
         </TouchableOpacity>
       </View>
-      <View>
+      <View
+        style={[
+          {flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap'},
+        ]}>
         {socials &&
           socials.map(function (e, i) {
             return (
@@ -132,9 +137,9 @@ const User = () => {
                   {
                     flexDirection: 'row',
                     alignItems: 'center',
-                    marginHorizontal: 130,
                     paddingHorizontal: 10,
                     borderRadius: 30,
+                    width: 180,
                     paddingVertical: 8,
                     margin: 6,
                     borderWidth: 2,
@@ -184,9 +189,13 @@ export default User;
 const styles = StyleSheet.create({
   name: {
     textTransform: 'uppercase',
-    fontSize: 32,
+    fontSize: 40,
     fontWeight: 'bold',
     textAlign: 'right',
+  },
+  id: {
+    fontSize: 14,
+    flexDirection: 'row',
   },
   input: {
     paddingHorizontal: 10,
