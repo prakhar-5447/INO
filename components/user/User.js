@@ -8,7 +8,9 @@ import {
   Button,
   Linking,
 } from 'react-native';
+import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
+import DocumentPicker from 'react-native-document-picker';
 import React, {useContext, useState, useEffect} from 'react';
 import {AuthContext} from '../auth/AuthProvider';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -21,18 +23,87 @@ const User = () => {
     email: '',
     displayName: '',
     phoneNumber: '',
+    profilePhoto:
+      'https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2Fdefault.png?alt=media',
   });
   const [socials, setSocials] = useState([]);
+  const [filePath, setFilePath] = useState(null);
 
   const click = async () => {
     const userData = await firestore().collection('Users').doc(user.uid).get();
     // console.log(userData._data);
-    const {phoneNumber, displayName, email, platform} = userData._data;
+    const {phoneNumber, displayName, email, platform, profilePhoto} =
+      userData._data;
     // console.log(platform);
-    setProfile({phoneNumber, displayName, email});
+    setProfile({phoneNumber, displayName, email, profilePhoto});
     setSocials(platform);
     // console.log(socials);
   };
+
+  const _chooseFile = async () => {
+    // Opening Document Picker to select one file
+    try {
+      const fileDetails = await DocumentPicker.pick({
+        // Provide which type of file you want user to pick
+        type: [DocumentPicker.types.allFiles],
+      });
+      console.log('fileDetails : ' + JSON.stringify(fileDetails));
+      // Setting the state for selected File
+      setFilePath(fileDetails);
+    } catch (error) {
+      setFilePath({});
+      // If user canceled the document selection
+      alert(
+        DocumentPicker.isCancel(error)
+          ? 'Canceled'
+          : 'Unknown Error: ' + JSON.stringify(error),
+      );
+    }
+  };
+
+  const _uploadFile = async () => {
+    try {
+      // Check if file selected
+      console.log(filePath);
+      if (Object.keys(filePath).length === 0)
+        return alert('Please Select any File');
+
+      // Create Reference
+      var ext = filePath[0].name.substr(filePath[0].name.lastIndexOf('.') + 1);
+      console.log(ext);
+      const reference = storage().ref(
+        `/myFiles/${user.uid}/profilePhoto.${ext}`,
+      );
+
+      // Put File
+      const task = reference.putFile(filePath[0].uri);
+
+      task.on('state_changed', taskSnapshot => {
+        console.log(
+          `${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`,
+        );
+      });
+      task.then(() => {
+        firestore()
+          .collection('Users')
+          .doc(user.uid)
+          .update({
+            profilePhoto: `https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2F${user.uid}%2FprofilePhoto.${ext}?alt=media`,
+          })
+          .then(() => {
+            // console.log('New Project added');
+            click();
+          });
+        alert('Profile Image Changed');
+      });
+      setFilePath(null);
+    } catch (error) {
+      console.log('Error->', error);
+      console.log('task failed');
+      alert(`Error-> ${error}`);
+    }
+  };
+
   const addSocial = () => {
     firestore()
       .collection('Users')
@@ -72,7 +143,59 @@ const User = () => {
           <Text>ID : </Text>
           <Text selectable={true}>{user.uid}</Text>
         </View>
-        <Text style={[styles.text, styles.name]}>{profile.displayName}</Text>
+        <View style={[{alignItems: 'flex-end'}]}>
+          <Image
+            style={[{width: 100, height: 100, borderRadius: 100}]}
+            source={{
+              uri: profile.profilePhoto,
+            }}
+          />
+        </View>
+        <View
+          style={[
+            {
+              alignItems: 'center',
+              flexDirection: 'row',
+              justifyContent: 'flex-end',
+            },
+          ]}>
+          {filePath ? (
+            <View
+              style={[
+                {
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                },
+              ]}>
+              <TouchableOpacity
+                onPress={() => {
+                  setFilePath(null);
+                }}>
+                <FontAwesome5
+                  name={'minus'}
+                  size={15}
+                  color={'black'}></FontAwesome5>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={_uploadFile}>
+                <FontAwesome5
+                  name={'check'}
+                  style={[{marginHorizontal: 10}]}
+                  size={15}
+                  color={'black'}></FontAwesome5>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <TouchableOpacity onPress={_chooseFile}>
+              <FontAwesome5
+                name={'file-import'}
+                style={[{marginHorizontal: 10}]}
+                size={15}
+                color={'black'}></FontAwesome5>
+            </TouchableOpacity>
+          )}
+
+          <Text style={[styles.text, styles.name]}>{profile.displayName}</Text>
+        </View>
         <View style={styles.detail}>
           <FontAwesome5
             name={'envelope'}
