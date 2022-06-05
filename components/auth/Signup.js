@@ -22,6 +22,9 @@ const Signup = ({navigation}) => {
             email: user.email,
             phoneNumber: phoneNumber,
             displayName: displayName,
+            uid: user.uid,
+            profilePhoto:
+              'https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2Fdefault.png?alt=media',
           })
           .then(() => {
             console.log('User added!');
