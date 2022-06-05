@@ -31,6 +31,31 @@ const Project = () => {
     setProject(project);
   };
 
+  const deletProject = e => {
+    // Create a reference to the file to delete
+    var desertRef = storage().refFromURL(e.imageUri);
+
+    // Delete the file
+    desertRef
+      .delete()
+      .then(function () {
+        // File deleted successfully
+        firestore()
+          .collection('Users')
+          .doc(user.uid)
+          .update({
+            project: firestore.FieldValue.arrayRemove(e),
+          })
+          .then(() => {
+            // console.log('Social deleted');
+            click();
+          });
+      })
+      .catch(function (error) {
+        // Uh-oh, an error occurred!
+      });
+  };
+
   const _chooseFile = async () => {
     // Opening Document Picker to select one file
     try {
@@ -135,12 +160,13 @@ const Project = () => {
             placeholder={'Paste your repo link here'}
           />
         </View>
-        <View>
+        <View style={[{flexDirection: 'row'}]}>
           <TextInput
+            maxLength={200}
             value={desc}
             multiline={true}
-            numberOfLines={4}
-            style={[styles.input, {width: 375}]}
+            numberOfLines={5}
+            style={[styles.input, {flex: 1}]}
             onChangeText={text => setDesc(text)}
             placeholder={'Write something about your project'}
           />
@@ -162,29 +188,76 @@ const Project = () => {
         {project &&
           project.map(function (e, i) {
             return (
-              <View key={i} style={[]}>
-                <Text style={[]}>{e.title}</Text>
-                <Text style={[]}>{e.link}</Text>
-                <Text style={[]}>{e.desc}</Text>
-                <Image
-                  style={[{width: 100, height: 100}]}
-                  source={{uri: e.imageUri}}></Image>
-                <TouchableOpacity
+              <View
+                key={i}
+                style={[{margin: 6, borderWidth: 1.2, borderColor: 'gray'}]}>
+                <View
                   style={[
                     {
-                      flex: 1,
-                      justifyContent: 'center',
-                      alignItems: 'center',
+                      flexDirection: 'row',
+                      borderBottomWidth: 1.2,
+                      borderBottomColor: 'gray',
+                      justifyContent: 'space-between',
                     },
-                  ]}
-                  onPress={() => {
-                    // deleteSocial(e);
-                  }}>
-                  <FontAwesome5
-                    name={'trash'}
-                    size={12}
-                    color={'black'}></FontAwesome5>
-                </TouchableOpacity>
+                  ]}>
+                  <Image
+                    style={[
+                      {
+                        height: 160,
+                        flex: 7,
+                      },
+                    ]}
+                    source={{uri: e.imageUri}}
+                  />
+                  <View
+                    style={[
+                      {
+                        flex: 3,
+                        marginHorizontal: 8,
+                        alignItems: 'flex-end',
+                        justifyContent: 'space-between',
+                      },
+                    ]}>
+                    <View
+                      style={[
+                        {
+                          alignItems: 'flex-end',
+                        },
+                      ]}>
+                      <Text style={[{fontSize: 26}]}>{e.title}</Text>
+                      <Text
+                        onPress={() => Linking.openURL(e.link)}
+                        style={[{fontSize: 14, color: 'blue'}]}>
+                        OPEN
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      style={[
+                        {
+                          marginBottom: 10,
+                        },
+                      ]}
+                      onPress={() => {
+                        deletProject(e);
+                      }}>
+                      <FontAwesome5
+                        name={'trash'}
+                        size={16}
+                        color={'black'}></FontAwesome5>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <Text
+                  style={[
+                    {
+                      fontSize: 18,
+                      paddingHorizontal: 2,
+                      textAlign: 'center',
+                      backgroundColor: 'lightgray',
+                    },
+                  ]}>
+                  {e.desc}
+                </Text>
               </View>
             );
           })}

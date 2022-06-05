@@ -54,6 +54,7 @@ const Signup = ({navigation}) => {
           placeholder={'Email'}
         />
         <TextInput
+          secureTextEntry={true}
           value={password}
           style={styles.input}
           onChangeText={text => setPassword(text)}

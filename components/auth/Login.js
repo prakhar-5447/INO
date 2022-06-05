@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View, Button, TextInput} from 'react-native';
-import React, {useState,useContext} from 'react';
+import React, {useState, useContext} from 'react';
 import auth from '@react-native-firebase/auth';
 import {AuthContext} from './AuthProvider';
 
@@ -33,6 +33,7 @@ const Login = ({navigation}) => {
           placeholder={'Email'}
         />
         <TextInput
+          secureTextEntry={true}
           value={password}
           style={styles.input}
           onChangeText={text => setPassword(text)}
