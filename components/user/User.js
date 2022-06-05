@@ -217,13 +217,13 @@ const User = () => {
           <TextInput
             value={social}
             style={[styles.input, {flex: 1}]}
-            onChangeText={text => setSocial(text)}
+            onChangeText={text => setSocial(text.trim())}
             placeholder={'Tag'}
           />
           <TextInput
             value={link}
             style={[styles.input, {flex: 3}]}
-            onChangeText={text => setLink(text)}
+            onChangeText={text => setLink(text.trim())}
             placeholder={'Paste your link here'}
           />
         </View>
