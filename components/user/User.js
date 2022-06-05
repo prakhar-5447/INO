@@ -251,57 +251,68 @@ const User = () => {
         style={[
           {flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap'},
         ]}>
-        {socials &&
-          socials.map(function (e, i) {
-            return (
-              <View
-                key={i}
-                style={[
-                  {
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    paddingHorizontal: 10,
-                    borderRadius: 30,
-                    width: 180,
-                    paddingVertical: 8,
-                    margin: 6,
-                    borderWidth: 2,
-                    borderColor: 'gray',
-                    backgroundColor: 'lightgray',
-                  },
-                ]}>
-                <Text
+        {socials && (
+          <Text
+            style={[{fontSize: 25, fontWeight: 'bold', marginHorizontal: 5}]}>
+            Connect with me
+          </Text>
+        )}
+        <View
+          style={[
+            {flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap'},
+          ]}>
+          {socials &&
+            socials.map(function (e, i) {
+              return (
+                <View
+                  key={i}
                   style={[
                     {
-                      marginLeft: 10,
-                      fontSize: 16,
-                      textTransform: 'uppercase',
-                      flex: 5,
-                      color: 'black',
-                    },
-                  ]}
-                  onPress={() => Linking.openURL(e.url)}>
-                  {e.social}
-                </Text>
-                <TouchableOpacity
-                  style={[
-                    {
-                      flex: 1,
-                      justifyContent: 'center',
+                      flexDirection: 'row',
                       alignItems: 'center',
+                      paddingHorizontal: 10,
+                      borderRadius: 30,
+                      width: 180,
+                      paddingVertical: 8,
+                      margin: 6,
+                      borderWidth: 2,
+                      borderColor: 'gray',
+                      backgroundColor: 'lightgray',
                     },
-                  ]}
-                  onPress={() => {
-                    deleteSocial(e);
-                  }}>
-                  <FontAwesome5
-                    name={'trash'}
-                    size={12}
-                    color={'black'}></FontAwesome5>
-                </TouchableOpacity>
-              </View>
-            );
-          })}
+                  ]}>
+                  <Text
+                    style={[
+                      {
+                        marginLeft: 10,
+                        fontSize: 16,
+                        textTransform: 'uppercase',
+                        flex: 5,
+                        color: 'black',
+                      },
+                    ]}
+                    onPress={() => Linking.openURL(e.url)}>
+                    {e.social}
+                  </Text>
+                  <TouchableOpacity
+                    style={[
+                      {
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      },
+                    ]}
+                    onPress={() => {
+                      deleteSocial(e);
+                    }}>
+                    <FontAwesome5
+                      name={'trash'}
+                      size={12}
+                      color={'black'}></FontAwesome5>
+                  </TouchableOpacity>
+                </View>
+              );
+            })}
+        </View>
       </View>
     </View>
   );
