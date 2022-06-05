@@ -3,6 +3,7 @@ import React, {useState, useContext} from 'react';
 import {AuthContext} from './AuthProvider';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const Signup = ({navigation}) => {
   const signup_auth = () => {
@@ -70,7 +71,48 @@ const Signup = ({navigation}) => {
           placeholder={'Phone Number'}
         />
       </View>
-      <Button title="Signup" style={styles.button} onPress={signup_auth} />
+      <View style={[{alignItems: 'center'}]}>
+        <TouchableOpacity
+          style={[
+            {
+              backgroundColor:
+                email === '' ||
+                password === '' ||
+                phoneNumber === '' ||
+                email === ''
+                  ? 'transparent'
+                  : 'blue',
+              borderRadius: 5,
+              borderColor:
+                email === '' ||
+                password === '' ||
+                phoneNumber === '' ||
+                displayName === ''
+                  ? 'gray'
+                  : 'lightblue',
+              borderWidth: 1,
+              paddingVertical: 8,
+              paddingHorizontal: 40,
+            },
+          ]}
+          onPress={signup_auth}>
+          <Text
+            style={[
+              {
+                color:
+                  email === '' ||
+                  password === '' ||
+                  phoneNumber === '' ||
+                  displayName === ''
+                    ? 'blue'
+                    : 'white',
+                fontSize: 20,
+              },
+            ]}>
+            Sign up
+          </Text>
+        </TouchableOpacity>
+      </View>
       <View style={styles.login}>
         <Text
           style={[styles.button, styles.text]}

@@ -1,4 +1,11 @@
-import {StyleSheet, Text, View, Button, TextInput} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useState, useContext} from 'react';
 import auth from '@react-native-firebase/auth';
 import {AuthContext} from './AuthProvider';
@@ -40,8 +47,33 @@ const Login = ({navigation}) => {
           placeholder={'Password'}
         />
       </View>
-      <View style={styles.signup}>
-        <Button title="Login" style={styles.button} onPress={login_auth} />
+      <View style={styles.login}>
+        <View style={[{alignItems: 'center'}]}>
+          <TouchableOpacity
+            style={[
+              {
+                backgroundColor:
+                  email === '' || password === '' ? 'transparent' : 'blue',
+                borderRadius: 5,
+                borderColor:
+                  email === '' || password === '' ? 'gray' : 'lightblue',
+                borderWidth: 1,
+                paddingVertical: 8,
+                paddingHorizontal: 40,
+              },
+            ]}
+            onPress={login_auth}>
+            <Text
+              style={[
+                {
+                  color: email === '' || password === '' ? 'blue' : 'white',
+                  fontSize: 20,
+                },
+              ]}>
+              Log in
+            </Text>
+          </TouchableOpacity>
+        </View>
         <Text
           style={[styles.button, styles.text]}
           onPress={() => {
@@ -77,6 +109,6 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     textAlign: 'center',
     fontSize: 20,
-    marginTop:10
+    marginTop: 10,
   },
 });
