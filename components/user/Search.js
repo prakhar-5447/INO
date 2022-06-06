@@ -50,8 +50,7 @@ const Search = () => {
           <TextInput
             style={[styles.input, {flex: 1}]}
             onChangeText={text => {
-              find('prakhar sahu');
-              // find(text.trim());
+              find(text.trim());
             }}
             placeholder={'Enter name'}
           />

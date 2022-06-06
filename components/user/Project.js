@@ -10,15 +10,14 @@ import {
   TextInput,
   Linking,
 } from 'react-native';
-import React, {useState, useEffect, useContext} from 'react';
-import storage from '@react-native-firebase/storage';
+import React, {useState, useEffect} from 'react';
 import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
+import auth from '@react-native-firebase/auth';
 import DocumentPicker from 'react-native-document-picker';
-import {AuthContext} from '../auth/AuthProvider';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const Project = () => {
-  const {user} = useContext(AuthContext);
   const [filePath, setFilePath] = useState({});
   const [title, setTitle] = useState('');
   const [desc, setDesc] = useState('');
@@ -26,7 +25,10 @@ const Project = () => {
   const [project, setProject] = useState([]);
 
   const click = async () => {
-    const userData = await firestore().collection('Users').doc(user.uid).get();
+    const userData = await firestore()
+      .collection('Users')
+      .doc(auth().currentUser.uid)
+      .get();
     // console.log(userData._data);
     const {project} = userData._data;
     setProject(project);
@@ -43,7 +45,7 @@ const Project = () => {
         // File deleted successfully
         firestore()
           .collection('Users')
-          .doc(user.uid)
+          .doc(auth().currentUser.uid)
           .update({
             project: firestore.FieldValue.arrayRemove(e),
           })
@@ -88,7 +90,7 @@ const Project = () => {
       // Create Reference
       console.log(filePath[0].name);
       const reference = storage().ref(
-        `/myFiles/${user.uid}/${filePath[0].name}`,
+        `/myFiles/${auth().currentUser.uid}/${filePath[0].name}`,
       );
 
       // Put File
@@ -102,13 +104,15 @@ const Project = () => {
       task.then(() => {
         firestore()
           .collection('Users')
-          .doc(user.uid)
+          .doc(auth().currentUser.uid)
           .update({
             project: firestore.FieldValue.arrayUnion({
-              title: title.trim(),
+              title: title.trim().toLowerCase(),
               link: link.trim(),
               desc: desc.trim(),
-              imageUri: `https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2F${user.uid}%2F${filePath[0].name}?alt=media`,
+              imageUri: `https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2F${
+                auth().currentUser.uid
+              }%2F${filePath[0].name}?alt=media`,
             }),
           })
           .then(() => {
@@ -157,7 +161,7 @@ const Project = () => {
           <TextInput
             value={link}
             style={[styles.input, {flex: 3}]}
-            onChangeText={text => setLink(text)}
+            onChangeText={text => setLink(text.trim())}
             placeholder={'Paste your repo link here'}
           />
         </View>
@@ -216,7 +220,6 @@ const Project = () => {
                       alignItems: 'flex-end',
                       justifyContent: 'space-between',
                       paddingHorizontal: 10,
-
                     },
                   ]}>
                   <Text

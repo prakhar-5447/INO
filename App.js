@@ -6,24 +6,24 @@ import 'react-native-gesture-handler';
  * @format
  * @flow strict-local
  */
-import React, {useContext} from 'react';
+import React from 'react';
 import {StyleSheet, Button, Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Login from './components/auth/Login';
 import Signup from './components/auth/Signup';
-import auth from '@react-native-firebase/app';
+import auth from '@react-native-firebase/auth';
 import Profile from './components/user/Profile';
-import {AuthContext, AuthProvider} from './components/auth/AuthProvider';
 
 function HomeScreen({navigation}) {
-  const {user} = useContext(AuthContext);
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <Button
-        onPress={() => {
-          if (user) navigation.navigate('Profile');
-          else navigation.navigate('Login');
+        onPress={async () => {
+          if (auth().currentUser) {
+            // console.log(auth().currentUser);
+            navigation.navigate('Profile');
+          } else navigation.navigate('Login');
         }}
         title="Welcome to INO"
       />
@@ -35,7 +35,6 @@ const Stack = createStackNavigator();
 
 const App = () => {
   return (
-    <AuthProvider>
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name="INO" component={HomeScreen}></Stack.Screen>
@@ -47,7 +46,6 @@ const App = () => {
             component={Profile}></Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
-    </AuthProvider>
   );
 };
 

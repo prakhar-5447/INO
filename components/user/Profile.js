@@ -1,7 +1,6 @@
 import {StyleSheet, Text, Button, View} from 'react-native';
-import React, {useContext} from 'react';
+import React from 'react';
 import auth from '@react-native-firebase/auth';
-import {AuthContext} from '../auth/AuthProvider';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import User from './User';
@@ -9,13 +8,15 @@ import Search from './Search';
 import Project from './Project';
 
 const Tab = createBottomTabNavigator();
-const Profile = () => {
+const Profile = ({navigation}) => {
   const logOut = () => {
     auth()
       .signOut()
       .then(() => {
-        setUser(null);
-        console.log('logged out');
+        console.log('Logged out');
+        if (!auth().currentUser) {
+          navigation.replace('Login');
+        }
       })
       .catch(error => {
         // An error happened.
@@ -23,7 +24,6 @@ const Profile = () => {
         alert(error.message);
       });
   };
-  const {setUser} = useContext(AuthContext);
 
   return (
     <Tab.Navigator
@@ -51,9 +51,48 @@ const Profile = () => {
           );
         },
       })}>
-      <Tab.Screen name="User" component={User} />
-      <Tab.Screen name="Find" component={Search} />
-      <Tab.Screen name="Project" component={Project} />
+      <Tab.Screen
+        options={{
+          headerRight: () => (
+            <Button
+              style={[{marginRight: 10}]}
+              onPress={logOut}
+              title="Log out"
+              color="black"
+            />
+          ),
+        }}
+        name="User"
+        component={User}
+      />
+      <Tab.Screen
+        options={{
+          headerRight: () => (
+            <Button
+              style={[{marginRight: 10}]}
+              onPress={logOut}
+              title="Log out"
+              color="black"
+            />
+          ),
+        }}
+        name="Find"
+        component={Search}
+      />
+      <Tab.Screen
+        options={{
+          headerRight: () => (
+            <Button
+              style={[{marginRight: 10}]}
+              onPress={logOut}
+              title="Log out"
+              color="black"
+            />
+          ),
+        }}
+        name="Project"
+        component={Project}
+      />
     </Tab.Navigator>
   );
 };

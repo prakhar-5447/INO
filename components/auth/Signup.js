@@ -1,8 +1,7 @@
 import {StyleSheet, Text, View, Button, TextInput} from 'react-native';
-import React, {useState, useContext} from 'react';
-import {AuthContext} from './AuthProvider';
-import auth from '@react-native-firebase/auth';
+import React, {useState} from 'react';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const Signup = ({navigation}) => {
@@ -12,7 +11,6 @@ const Signup = ({navigation}) => {
       .then(userCredential => {
         // Signed up
         const user = userCredential.user;
-        setUser(user);
         navigation.replace('Profile');
         console.log('logged in with :', user.email);
         console.log(user);
@@ -36,7 +34,6 @@ const Signup = ({navigation}) => {
         alert(error.message);
       });
   };
-  const {setUser} = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');

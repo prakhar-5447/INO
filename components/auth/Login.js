@@ -6,9 +6,8 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState, useContext} from 'react';
+import React, {useState} from 'react';
 import auth from '@react-native-firebase/auth';
-import {AuthContext} from './AuthProvider';
 
 const Login = ({navigation}) => {
   const login_auth = () => {
@@ -17,17 +16,14 @@ const Login = ({navigation}) => {
       .then(userCredential => {
         // Signed in
         const user = userCredential.user;
-        setUser(user);
         navigation.replace('Profile');
-        console.log('logged in with :', user.email);
-        console.log(user);
+        console.log('logged in with :', auth().currentUser.email);
       })
       .catch(error => {
         const errorCode = error.code;
         alert(error.message);
       });
   };
-  const {setUser} = useContext(AuthContext);
   const [email, setEmail] = useState('sahuprakhar022003@gmail.com');
   const [password, setPassword] = useState('jayomsahu2003');
   return (

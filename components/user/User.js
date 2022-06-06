@@ -8,15 +8,14 @@ import {
   Button,
   Linking,
 } from 'react-native';
-import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
+import auth from '@react-native-firebase/auth';
 import DocumentPicker from 'react-native-document-picker';
-import React, {useContext, useState, useEffect} from 'react';
-import {AuthContext} from '../auth/AuthProvider';
+import React, {useState, useEffect} from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-const User = () => {
-  const {user} = useContext(AuthContext);
+const User = ({navigation}) => {
   const [link, setLink] = useState('');
   const [social, setSocial] = useState('');
   const [profile, setProfile] = useState({
@@ -30,13 +29,17 @@ const User = () => {
   const [filePath, setFilePath] = useState(null);
 
   const click = async () => {
-    const userData = await firestore().collection('Users').doc(user.uid).get();
+    const userData = await firestore()
+      .collection('Users')
+      .doc(auth().currentUser.uid)
+      .get();
     // console.log(userData._data);
     const {phoneNumber, displayName, email, platform, profilePhoto} =
       userData._data;
     // console.log(platform);
     setProfile({phoneNumber, displayName, email, profilePhoto});
     setSocials(platform);
+
     // console.log(socials);
   };
 
@@ -73,7 +76,7 @@ const User = () => {
       var ext = filePath[0].name.substr(filePath[0].name.lastIndexOf('.') + 1);
       console.log(ext);
       const reference = storage().ref(
-        `/myFiles/${user.uid}/${timestamp}.${ext}`,
+        `/myFiles/${auth().currentUser.uid}/${timestamp}.${ext}`,
       );
 
       if (
@@ -98,9 +101,11 @@ const User = () => {
       task.then(() => {
         firestore()
           .collection('Users')
-          .doc(user.uid)
+          .doc(auth().currentUser.uid)
           .update({
-            profilePhoto: `https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2F${user.uid}%2F${timestamp}.${ext}?alt=media`,
+            profilePhoto: `https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2F${
+              auth().currentUser.uid
+            }%2F${timestamp}.${ext}?alt=media`,
           })
           .then(() => {
             // console.log('New Project added');
@@ -119,9 +124,12 @@ const User = () => {
   const addSocial = () => {
     firestore()
       .collection('Users')
-      .doc(user.uid)
+      .doc(auth().currentUser.uid)
       .update({
-        platform: firestore.FieldValue.arrayUnion({social: social, url: link}),
+        platform: firestore.FieldValue.arrayUnion({
+          social: social.toLowerCase(),
+          url: link,
+        }),
       })
       .then(() => {
         // console.log('New Social added');
@@ -134,7 +142,7 @@ const User = () => {
   const deleteSocial = e => {
     firestore()
       .collection('Users')
-      .doc(user.uid)
+      .doc(auth().currentUser.uid)
       .update({
         platform: firestore.FieldValue.arrayRemove(e),
       })
@@ -153,7 +161,7 @@ const User = () => {
       <View style={styles.info}>
         <View style={[styles.id]}>
           <Text>ID : </Text>
-          <Text selectable={true}>{user.uid}</Text>
+          <Text selectable={true}>{auth().currentUser.uid}</Text>
         </View>
         <View style={[{alignItems: 'flex-end'}]}>
           <Image
@@ -262,13 +270,18 @@ const User = () => {
           <FontAwesome5 name={'check'} size={16} color={'black'}></FontAwesome5>
         </TouchableOpacity>
       </View>
-      <View
-        style={[
-          {flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap'},
-        ]}>
-        {socials && (
+      <View style={[{justifyContent: 'center', flexWrap: 'wrap'}]}>
+        {socials.length > 0 && (
           <Text
-            style={[{fontSize: 25, fontWeight: 'bold', marginHorizontal: 5}]}>
+            style={[
+              {
+                fontSize: 25,
+                fontWeight: 'bold',
+                textAlign: 'center',
+                marginHorizontal: 5,
+                width: '100%',
+              },
+            ]}>
             Connect with me
           </Text>
         )}
@@ -276,57 +289,56 @@ const User = () => {
           style={[
             {flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap'},
           ]}>
-          {socials &&
-            socials.map(function (e, i) {
-              return (
-                <View
-                  key={i}
+          {socials.map(function (e, i) {
+            return (
+              <View
+                key={i}
+                style={[
+                  {
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    paddingHorizontal: 10,
+                    borderRadius: 30,
+                    width: 180,
+                    paddingVertical: 8,
+                    margin: 6,
+                    borderWidth: 2,
+                    borderColor: 'gray',
+                    backgroundColor: 'lightgray',
+                  },
+                ]}>
+                <Text
                   style={[
                     {
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      paddingHorizontal: 10,
-                      borderRadius: 30,
-                      width: 180,
-                      paddingVertical: 8,
-                      margin: 6,
-                      borderWidth: 2,
-                      borderColor: 'gray',
-                      backgroundColor: 'lightgray',
+                      marginLeft: 10,
+                      fontSize: 16,
+                      textTransform: 'uppercase',
+                      flex: 5,
+                      color: 'black',
                     },
-                  ]}>
-                  <Text
-                    style={[
-                      {
-                        marginLeft: 10,
-                        fontSize: 16,
-                        textTransform: 'uppercase',
-                        flex: 5,
-                        color: 'black',
-                      },
-                    ]}
-                    onPress={() => Linking.openURL(e.url)}>
-                    {e.social}
-                  </Text>
-                  <TouchableOpacity
-                    style={[
-                      {
-                        flex: 1,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      },
-                    ]}
-                    onPress={() => {
-                      deleteSocial(e);
-                    }}>
-                    <FontAwesome5
-                      name={'trash'}
-                      size={12}
-                      color={'black'}></FontAwesome5>
-                  </TouchableOpacity>
-                </View>
-              );
-            })}
+                  ]}
+                  onPress={() => Linking.openURL(e.url)}>
+                  {e.social}
+                </Text>
+                <TouchableOpacity
+                  style={[
+                    {
+                      flex: 1,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    },
+                  ]}
+                  onPress={() => {
+                    deleteSocial(e);
+                  }}>
+                  <FontAwesome5
+                    name={'trash'}
+                    size={12}
+                    color={'black'}></FontAwesome5>
+                </TouchableOpacity>
+              </View>
+            );
+          })}
         </View>
       </View>
     </View>
