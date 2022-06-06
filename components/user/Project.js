@@ -8,6 +8,7 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  Linking,
 } from 'react-native';
 import React, {useState, useEffect, useContext} from 'react';
 import storage from '@react-native-firebase/storage';
@@ -184,80 +185,83 @@ const Project = () => {
           <Text style={styles.buttonTextStyle}>ADD PROJECT</Text>
         </TouchableOpacity>
       </View>
-      <ScrollView>
+      <ScrollView style={[{backgroundColor: 'lightgray'}]}>
         {project &&
           project.map(function (e, i) {
             return (
               <View
                 key={i}
-                style={[{margin: 6, borderWidth: 1.2, borderColor: 'gray'}]}>
+                style={[
+                  {
+                    margin: 10,
+                    borderWidth: 1.2,
+                    borderColor: 'gray',
+                    backgroundColor: 'white',
+                    padding: 10,
+                  },
+                ]}>
+                <Image
+                  style={[
+                    {
+                      height: 200,
+                    },
+                  ]}
+                  source={{uri: e.imageUri}}
+                />
                 <View
                   style={[
                     {
                       flexDirection: 'row',
-                      borderBottomWidth: 1.2,
-                      borderBottomColor: 'gray',
+                      marginVertical: 8,
+                      alignItems: 'flex-end',
                       justifyContent: 'space-between',
+                      paddingHorizontal: 10,
+
                     },
                   ]}>
-                  <Image
+                  <Text
+                    onPress={() => Linking.openURL(e.link)}
                     style={[
                       {
-                        height: 160,
-                        flex: 7,
-                      },
-                    ]}
-                    source={{uri: e.imageUri}}
-                  />
-                  <View
-                    style={[
-                      {
-                        flex: 3,
-                        marginHorizontal: 8,
-                        alignItems: 'flex-end',
-                        justifyContent: 'space-between',
+                        fontSize: 26,
+                        color: 'blue',
+                        textTransform: 'uppercase',
                       },
                     ]}>
-                    <View
-                      style={[
-                        {
-                          alignItems: 'flex-end',
-                        },
-                      ]}>
-                      <Text style={[{fontSize: 26}]}>{e.title}</Text>
-                      <Text
-                        onPress={() => Linking.openURL(e.link)}
-                        style={[{fontSize: 14, color: 'blue'}]}>
-                        OPEN
-                      </Text>
-                    </View>
-                    <TouchableOpacity
-                      style={[
-                        {
-                          marginBottom: 10,
-                        },
-                      ]}
-                      onPress={() => {
-                        deletProject(e);
-                      }}>
-                      <FontAwesome5
-                        name={'trash'}
-                        size={16}
-                        color={'black'}></FontAwesome5>
-                    </TouchableOpacity>
-                  </View>
+                    {e.title}
+                  </Text>
+                  <TouchableOpacity
+                    style={[
+                      {
+                        marginBottom: 10,
+                      },
+                    ]}
+                    onPress={() => {
+                      deletProject(e);
+                    }}>
+                    <FontAwesome5
+                      name={'trash'}
+                      size={16}
+                      color={'black'}></FontAwesome5>
+                  </TouchableOpacity>
                 </View>
-                <Text
+                <View
                   style={[
                     {
-                      fontSize: 18,
-                      padding: 6,
-                      textAlign: 'center',
-                      backgroundColor: 'lightgray',
+                      flexDirection: 'row',
+                      marginBottom: 8,
+                      paddingHorizontal: 10,
                     },
                   ]}>
-                  {e.desc}
-                </Text>
+                  <Text
+                    style={[
+                      {
+                        fontSize: 18,
+                      },
+                    ]}>
+                    {e.desc}
+                  </Text>
+                </View>
               </View>
             );
           })}
