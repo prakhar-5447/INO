@@ -24,8 +24,8 @@ const Login = ({navigation}) => {
         alert(error.message);
       });
   };
-  const [email, setEmail] = useState('sahuprakhar022003@gmail.com');
-  const [password, setPassword] = useState('jayomsahu2003');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   return (
     <View style={styles.body}>
       <View style={styles.login}>
