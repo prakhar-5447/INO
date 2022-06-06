@@ -20,9 +20,9 @@ const Signup = ({navigation}) => {
           .collection('Users')
           .doc(user.uid)
           .set({
-            email: user.email,
+            email: email,
             phoneNumber: phoneNumber,
-            displayName: displayName,
+            displayName: displayName.toLowerCase().trim(),
             uid: user.uid,
             profilePhoto:
               'https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2Fdefault.png?alt=media',
@@ -32,7 +32,6 @@ const Signup = ({navigation}) => {
           });
       })
       .catch(error => {
-        console.log('User!');
         const errorCode = error.code;
         alert(error.message);
       });
@@ -54,20 +53,20 @@ const Signup = ({navigation}) => {
         <TextInput
           value={email}
           style={[styles.input]}
-          onChangeText={text => setEmail(text)}
+          onChangeText={text => setEmail(text.trim())}
           placeholder={'Email'}
         />
         <TextInput
           secureTextEntry={true}
           value={password}
           style={styles.input}
-          onChangeText={text => setPassword(text)}
+          onChangeText={text => setPassword(text.trim())}
           placeholder={'Password'}
         />
         <TextInput
           value={phoneNumber}
           style={styles.input}
-          onChangeText={text => setPhoneNumber(text)}
+          onChangeText={text => setPhoneNumber(text.trim())}
           placeholder={'Phone Number'}
         />
       </View>

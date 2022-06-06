@@ -36,14 +36,14 @@ const Login = ({navigation}) => {
         <TextInput
           value={email}
           style={[styles.input]}
-          onChangeText={text => setEmail(text)}
+          onChangeText={text => setEmail(text.trim())}
           placeholder={'Email'}
         />
         <TextInput
           secureTextEntry={true}
           value={password}
           style={styles.input}
-          onChangeText={text => setPassword(text)}
+          onChangeText={text => setPassword(text.trim())}
           placeholder={'Password'}
         />
       </View>
