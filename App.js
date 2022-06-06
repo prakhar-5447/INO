@@ -17,7 +17,27 @@ import Profile from './components/user/Profile';
 
 function HomeScreen({navigation}) {
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+    <View
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+      <Text style={[{textAlign: 'center', fontWeight: 'bold', fontSize: 40}]}>
+        Welcome to INO
+      </Text>
+      <Text
+        style={[
+          {
+            textAlign: 'center',
+            marginHorizontal: 50,
+            marginBottom: 20,
+            fontSize: 20,
+          },
+        ]}>
+        A userfriendly app to share your socials and also store your project
+        details to use it on your web portfolio.
+      </Text>
       <Button
         onPress={async () => {
           if (auth().currentUser) {
@@ -25,7 +45,7 @@ function HomeScreen({navigation}) {
             navigation.navigate('Profile');
           } else navigation.navigate('Login');
         }}
-        title="Welcome to INO"
+        title="Let's go"
       />
     </View>
   );
@@ -35,17 +55,17 @@ const Stack = createStackNavigator();
 
 const App = () => {
   return (
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="INO" component={HomeScreen}></Stack.Screen>
-          <Stack.Screen name="Login" component={Login}></Stack.Screen>
-          <Stack.Screen name="Signup" component={Signup}></Stack.Screen>
-          <Stack.Screen
-            name="Profile"
-            options={{headerShown: false}}
-            component={Profile}></Stack.Screen>
-        </Stack.Navigator>
-      </NavigationContainer>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="INO" component={HomeScreen}></Stack.Screen>
+        <Stack.Screen name="Login" component={Login}></Stack.Screen>
+        <Stack.Screen name="Signup" component={Signup}></Stack.Screen>
+        <Stack.Screen
+          name="Profile"
+          options={{headerShown: false}}
+          component={Profile}></Stack.Screen>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
