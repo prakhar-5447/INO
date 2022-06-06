@@ -61,8 +61,9 @@ const User = () => {
     }
   };
 
-  const _uploadFile = async () => {
+  const _uploadFile = async e => {
     try {
+      const timestamp = new Date().getTime();
       // Check if file selected
       console.log(filePath);
       if (Object.keys(filePath).length === 0)
@@ -72,8 +73,19 @@ const User = () => {
       var ext = filePath[0].name.substr(filePath[0].name.lastIndexOf('.') + 1);
       console.log(ext);
       const reference = storage().ref(
-        `/myFiles/${user.uid}/profilePhoto.${ext}`,
+        `/myFiles/${user.uid}/${timestamp}.${ext}`,
       );
+
+      if (
+        e !==
+        'https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2Fdefault.png?alt=media'
+      ) {
+        // Create a reference to the file to delete
+        var desertRef = storage().refFromURL(e);
+
+        // Delete the file
+        desertRef.delete().then(() => {});
+      }
 
       // Put File
       const task = reference.putFile(filePath[0].uri);
@@ -88,7 +100,7 @@ const User = () => {
           .collection('Users')
           .doc(user.uid)
           .update({
-            profilePhoto: `https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2F${user.uid}%2FprofilePhoto.${ext}?alt=media`,
+            profilePhoto: `https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2F${user.uid}%2F${timestamp}.${ext}?alt=media`,
           })
           .then(() => {
             // console.log('New Project added');
@@ -176,7 +188,10 @@ const User = () => {
                   size={15}
                   color={'black'}></FontAwesome5>
               </TouchableOpacity>
-              <TouchableOpacity onPress={_uploadFile}>
+              <TouchableOpacity
+                onPress={() => {
+                  _uploadFile(profile.profilePhoto);
+                }}>
                 <FontAwesome5
                   name={'check'}
                   style={[{marginHorizontal: 10}]}
