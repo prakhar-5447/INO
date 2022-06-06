@@ -8,6 +8,7 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  Linking,
 } from 'react-native';
 import React, {useState} from 'react';
 import storage from '@react-native-firebase/storage';
@@ -25,14 +26,8 @@ const Search = () => {
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
-          let temp = {
-            displayName: doc.data().displayName,
-            profilePhoto: doc.data().profilePhoto,
-            uid: doc.data().uid,
-          };
-          // console.log('MedData', doc.data());
-          result.push(temp);
-          console.log(temp);
+          // console.log('MedData', doc.data().platform);
+          result.push(doc.data());
         });
         console.log(result);
         setAllId(result);
@@ -55,7 +50,7 @@ const Search = () => {
           <TextInput
             style={[styles.input, {flex: 1}]}
             onChangeText={text => {
-              find('prakhar');
+              find('prakhar sahu');
               // find(text.trim());
             }}
             placeholder={'Enter name'}
@@ -80,6 +75,7 @@ const Search = () => {
                       marginVertical: 8,
                       flexDirection: 'row',
                       justifyContent: 'space-between',
+                      alignItems: 'center',
                       borderWidth: 1,
                       borderColor: getRandomColor(),
                       backgroundColor: 'white',
@@ -88,7 +84,9 @@ const Search = () => {
                     },
                   ]}>
                   <Image
-                    style={[{width: 80, height: 80, borderRadius: 100}]}
+                    style={[
+                      {width: 80, height: 80, margin: 3, borderRadius: 100},
+                    ]}
                     source={{uri: e.profilePhoto}}
                   />
                   <View
@@ -110,33 +108,40 @@ const Search = () => {
                         style={[{fontSize: 26, textTransform: 'uppercase'}]}>
                         {e.displayName}
                       </Text>
-                      <Text style={[{fontSize: 12}]}>{e.uid}</Text>
-                    </View>
-                    <TouchableOpacity
-                      onPress={() => {
-                        console.log('skk');
-                      }}
-                      style={[
-                        {
-                          flexDirection: 'row',
-                          justifyContent: 'center',
-                        },
-                      ]}>
-                      <Text
+                      <Text style={[{fontSize: 14}]}>{e.email}</Text>
+                      <Text style={[{fontSize: 14}]}>{e.phoneNumber}</Text>
+                      <View
                         style={[
                           {
-                            fontSize: 12,
-                            marginHorizontal: 2,
-                            color: 'blue',
+                            flexDirection: 'row',
+                            maxWidth: 200,
+                            flexWrap: 'wrap',
+                            marginTop: 2,
+                            justifyContent: 'flex-end',
                           },
                         ]}>
-                        Know more
-                      </Text>
-                      <FontAwesome5
-                        name={'angle-right'}
-                        size={16}
-                        color={'blue'}></FontAwesome5>
-                    </TouchableOpacity>
+                        {e.platform &&
+                          e.platform.map((item, i) => {
+                            return (
+                              <Text
+                                style={[
+                                  {
+                                    marginHorizontal: 2,
+                                    textTransform: 'uppercase',
+                                    color: 'blue',
+                                    fontSize: 12,
+                                  },
+                                ]}
+                                key={i}
+                                onPress={() => {
+                                  Linking.openURL(item.link);
+                                }}>
+                                {item.social}
+                              </Text>
+                            );
+                          })}
+                      </View>
+                    </View>
                   </View>
                 </View>
               );
