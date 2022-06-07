@@ -16,6 +16,7 @@ import storage from '@react-native-firebase/storage';
 import auth from '@react-native-firebase/auth';
 import DocumentPicker from 'react-native-document-picker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import RNFS from 'react-native-fs';
 
 const Project = () => {
   const [filePath, setFilePath] = useState({});
@@ -55,7 +56,7 @@ const Project = () => {
           });
       })
       .catch(function (error) {
-        // Uh-oh, an error occurred!
+        alert(error);
       });
   };
 
@@ -64,7 +65,7 @@ const Project = () => {
     try {
       const fileDetails = await DocumentPicker.pick({
         // Provide which type of file you want user to pick
-        type: [DocumentPicker.types.allFiles],
+        presentationStyle: 'fullScreen',
       });
       console.log('fileDetails : ' + JSON.stringify(fileDetails));
       // Setting the state for selected File
@@ -82,19 +83,23 @@ const Project = () => {
 
   const _uploadFile = async () => {
     try {
+      const timestamp = new Date().getTime();
+
       // Check if file selected
       console.log(filePath);
       if (Object.keys(filePath).length === 0)
         return alert('Please Select any File');
 
       // Create Reference
-      console.log(filePath[0].name);
+      var ext = filePath[0].name.substr(filePath[0].name.lastIndexOf('.') + 1);
+      console.log(ext);
       const reference = storage().ref(
-        `/myFiles/${auth().currentUser.uid}/${filePath[0].name}`,
+        `/myFiles/${auth().currentUser.uid}/project-${timestamp}.${ext}`,
       );
 
-      // Put File
-      const task = reference.putFile(filePath[0].uri);
+      //Put File
+      const data = await RNFS.readFile(filePath[0].uri, 'base64');
+      const task = reference.putString(data, 'base64');
 
       task.on('state_changed', taskSnapshot => {
         console.log(
@@ -112,7 +117,7 @@ const Project = () => {
               desc: desc.trim(),
               imageUri: `https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2F${
                 auth().currentUser.uid
-              }%2F${filePath[0].name}?alt=media`,
+              }%2Fproject-${timestamp}.${ext}?alt=media`,
             }),
           })
           .then(() => {
@@ -237,6 +242,7 @@ const Project = () => {
                     style={[
                       {
                         marginBottom: 10,
+                        padding: 2,
                       },
                     ]}
                     onPress={() => {

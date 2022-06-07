@@ -14,6 +14,7 @@ import auth from '@react-native-firebase/auth';
 import DocumentPicker from 'react-native-document-picker';
 import React, {useState, useEffect} from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import RNFS from 'react-native-fs';
 
 const User = ({navigation}) => {
   const [link, setLink] = useState('');
@@ -25,7 +26,7 @@ const User = ({navigation}) => {
     profilePhoto:
       'https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2Fdefault.png?alt=media',
   });
-  const [socials, setSocials] = useState([]);
+  const [platform, setPlatform] = useState([]);
   const [filePath, setFilePath] = useState(null);
 
   const click = async () => {
@@ -38,9 +39,9 @@ const User = ({navigation}) => {
       userData._data;
     // console.log(platform);
     setProfile({phoneNumber, displayName, email, profilePhoto});
-    setSocials(platform);
+    setPlatform(platform);
 
-    // console.log(socials);
+    // console.log(platform);
   };
 
   const _chooseFile = async () => {
@@ -90,8 +91,9 @@ const User = ({navigation}) => {
         desertRef.delete().then(() => {});
       }
 
-      // Put File
-      const task = reference.putFile(filePath[0].uri);
+      //Put File
+      const data = await RNFS.readFile(filePath[0].uri, 'base64');
+      const task = reference.putString(data, 'base64');
 
       task.on('state_changed', taskSnapshot => {
         console.log(
@@ -271,7 +273,7 @@ const User = ({navigation}) => {
         </TouchableOpacity>
       </View>
       <View style={[{justifyContent: 'center', flexWrap: 'wrap'}]}>
-        {socials.length > 0 && (
+        {platform && platform.length > 0 && (
           <Text
             style={[
               {
@@ -289,56 +291,57 @@ const User = ({navigation}) => {
           style={[
             {flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap'},
           ]}>
-          {socials.map(function (e, i) {
-            return (
-              <View
-                key={i}
-                style={[
-                  {
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    paddingHorizontal: 10,
-                    borderRadius: 30,
-                    width: 180,
-                    paddingVertical: 8,
-                    margin: 6,
-                    borderWidth: 2,
-                    borderColor: 'gray',
-                    backgroundColor: 'lightgray',
-                  },
-                ]}>
-                <Text
+          {platform &&
+            platform.map(function (e, i) {
+              return (
+                <View
+                  key={i}
                   style={[
                     {
-                      marginLeft: 10,
-                      fontSize: 16,
-                      textTransform: 'uppercase',
-                      flex: 5,
-                      color: 'black',
-                    },
-                  ]}
-                  onPress={() => Linking.openURL(e.url)}>
-                  {e.social}
-                </Text>
-                <TouchableOpacity
-                  style={[
-                    {
-                      flex: 1,
-                      justifyContent: 'center',
+                      flexDirection: 'row',
                       alignItems: 'center',
+                      paddingHorizontal: 10,
+                      borderRadius: 30,
+                      width: 180,
+                      paddingVertical: 8,
+                      margin: 6,
+                      borderWidth: 2,
+                      borderColor: 'gray',
+                      backgroundColor: 'lightgray',
                     },
-                  ]}
-                  onPress={() => {
-                    deleteSocial(e);
-                  }}>
-                  <FontAwesome5
-                    name={'trash'}
-                    size={12}
-                    color={'black'}></FontAwesome5>
-                </TouchableOpacity>
-              </View>
-            );
-          })}
+                  ]}>
+                  <Text
+                    style={[
+                      {
+                        marginLeft: 10,
+                        fontSize: 16,
+                        textTransform: 'uppercase',
+                        flex: 5,
+                        color: 'black',
+                      },
+                    ]}
+                    onPress={() => Linking.openURL(e.url)}>
+                    {e.social}
+                  </Text>
+                  <TouchableOpacity
+                    style={[
+                      {
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      },
+                    ]}
+                    onPress={() => {
+                      deleteSocial(e);
+                    }}>
+                    <FontAwesome5
+                      name={'trash'}
+                      size={12}
+                      color={'black'}></FontAwesome5>
+                  </TouchableOpacity>
+                </View>
+              );
+            })}
         </View>
       </View>
     </View>
