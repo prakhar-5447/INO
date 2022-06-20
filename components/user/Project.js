@@ -18,7 +18,7 @@ import DocumentPicker from 'react-native-document-picker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import RNFS from 'react-native-fs';
 
-const Project = () => {
+const Followed = () => {
   const [filePath, setFilePath] = useState({});
   const [title, setTitle] = useState('');
   const [desc, setDesc] = useState('');
@@ -279,7 +279,7 @@ const Project = () => {
   );
 };
 
-export default Project;
+export default Followed;
 
 const styles = StyleSheet.create({
   container: {
