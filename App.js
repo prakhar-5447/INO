@@ -20,13 +20,13 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}>
         <Stack.Screen name="Login" component={Login}></Stack.Screen>
         <Stack.Screen name="Signup" component={Signup}></Stack.Screen>
-        <Stack.Screen
-          name="Profile"
-          options={{headerShown: false}}
-          component={Profile}></Stack.Screen>
+        <Stack.Screen name="Profile" component={Profile}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );
