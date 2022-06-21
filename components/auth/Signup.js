@@ -1,4 +1,11 @@
-import {StyleSheet, Text, View, Button, TextInput} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  TextInput,
+  ImageBackground,
+} from 'react-native';
 import React, {useState} from 'react';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
@@ -38,9 +45,15 @@ const Signup = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [displayName, setDisplayName] = useState('');
+
   return (
-    <View style={styles.body}>
-      <View style={styles.signup}>
+    <ImageBackground
+      source={require('../../assets/bg.jpg')}
+      resizeMode="cover"
+      blurRadius={5}
+      style={styles.image}>
+      <Text>Signup</Text>
+      <View style={styles.body}>
         <TextInput
           value={displayName}
           style={styles.input}
@@ -66,59 +79,56 @@ const Signup = ({navigation}) => {
           onChangeText={text => setPhoneNumber(text.trim())}
           placeholder={'Phone Number'}
         />
-      </View>
-      <View style={[{alignItems: 'center'}]}>
-        <TouchableOpacity
-          style={[
-            {
-              backgroundColor:
-                email === '' ||
-                password === '' ||
-                phoneNumber === '' ||
-                email === ''
-                  ? 'transparent'
-                  : 'blue',
-              borderRadius: 5,
-              borderColor:
-                email === '' ||
-                password === '' ||
-                phoneNumber === '' ||
-                displayName === ''
-                  ? 'gray'
-                  : 'lightblue',
-              borderWidth: 1,
-              paddingVertical: 8,
-              paddingHorizontal: 40,
-            },
-          ]}
-          onPress={signup_auth}>
-          <Text
+        <View style={[{alignItems: 'center'}]}>
+          <TouchableOpacity
             style={[
               {
-                color:
+                backgroundColor:
+                  email === '' ||
+                  password === '' ||
+                  phoneNumber === '' ||
+                  email === ''
+                    ? 'transparent'
+                    : 'blue',
+                borderRadius: 5,
+                borderColor:
                   email === '' ||
                   password === '' ||
                   phoneNumber === '' ||
                   displayName === ''
-                    ? 'blue'
-                    : 'white',
-                fontSize: 20,
+                    ? 'gray'
+                    : 'lightblue',
+                borderWidth: 1,
+                paddingVertical: 8,
+                paddingHorizontal: 40,
               },
-            ]}>
-            Sign up
-          </Text>
-        </TouchableOpacity>
+            ]}
+            onPress={signup_auth}>
+            <Text
+              style={[
+                {
+                  color:
+                    email === '' ||
+                    password === '' ||
+                    phoneNumber === '' ||
+                    displayName === ''
+                      ? 'blue'
+                      : 'white',
+                  fontSize: 20,
+                },
+              ]}>
+              Sign up
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={styles.login}>
-        <Text
-          style={[styles.button, styles.text]}
-          onPress={() => {
-            navigation.replace('Login');
-          }}>
-          Already have an account
-        </Text>
-      </View>
-    </View>
+      <Text
+        onPress={() => {
+          navigation.replace('Login');
+        }}>
+        Already have an account ? Login
+      </Text>
+    </ImageBackground>
   );
 };
 
@@ -146,5 +156,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 20,
     marginTop: 10,
+  },
+  image: {
+    flex: 1,
+    justifyContent: 'space-between',
   },
 });
