@@ -27,84 +27,101 @@ const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   return (
-    <View style={styles.body}>
-      <View style={styles.login}>
-        <TextInput
-          value={email}
-          style={[styles.input]}
-          onChangeText={text => setEmail(text.trim())}
-          placeholder={'Email'}
-        />
-        <TextInput
-          secureTextEntry={true}
-          value={password}
-          style={styles.input}
-          onChangeText={text => setPassword(text.trim())}
-          placeholder={'Password'}
-        />
-      </View>
-      <View style={styles.login}>
-        <View style={[{alignItems: 'center'}]}>
-          <TouchableOpacity
+    <ImageBackground
+      source={require('../../assets/image/bg.jpg')}
+      resizeMode="cover"
+      blurRadius={10}
+      style={styles.image}>
+      <View style={styles.body}>
+        <Text style={[{fontFamily: 'AlegreyaSansSC-Bold', fontSize: 25}]}>
+          Login
+        </Text>
+        <View style={[styles.form]}>
+          <View style={styles.area}>
+            <Text style={[styles.text]}>Email</Text>
+            <TextInput
+              value={email}
+              style={[styles.input]}
+              onChangeText={text => setEmail(text.trim())}
+            />
+          </View>
+          <View style={styles.area}>
+            <Text style={[styles.text]}>Password</Text>
+            <TextInput
+              secureTextEntry={true}
+              value={password}
+              style={styles.input}
+              onChangeText={text => setPassword(text.trim())}
+            />
+          </View>
+          <Text
             style={[
               {
-                backgroundColor:
-                  email === '' || password === '' ? 'transparent' : 'blue',
-                borderRadius: 5,
-                borderColor:
-                  email === '' || password === '' ? 'gray' : 'lightblue',
-                borderWidth: 1,
-                paddingVertical: 8,
-                paddingHorizontal: 40,
+                color: 'blue',
+                fontSize: 25,
+                textAlign: 'right',
+                marginTop: 20,
+                fontFamily: 'AlegreyaSansSC-Medium',
               },
             ]}
-            onPress={login_auth}>
-            <Text
-              style={[
-                {
-                  color: email === '' || password === '' ? 'blue' : 'white',
-                  fontSize: 20,
-                },
-              ]}>
-              Log in
-            </Text>
-          </TouchableOpacity>
+            onPress={Login}>
+            Login
+          </Text>
         </View>
+      </View>
+      <Text
+        style={[
+          {
+            fontFamily: 'AlegreyaSansSC-Regular',
+            textAlign: 'center',
+            fontSize: 20,
+            marginBottom: 30,
+          },
+        ]}>
+        Already have an account ?{' '}
         <Text
-          style={[styles.button, styles.text]}
+          style={[
+            {
+              color: 'blue',
+            },
+          ]}
           onPress={() => {
             navigation.replace('Signup');
           }}>
-          Create an account
+          Sign Up
         </Text>
-      </View>
-    </View>
+      </Text>
+    </ImageBackground>
   );
 };
 
-export default Login;
+export default Signup;
 
 const styles = StyleSheet.create({
-  body: {
-    paddingHorizontal: 20,
+  image: {
+    flex: 1,
+    justifyContent: 'space-between',
   },
-  login: {textAlign: 'center', marginVertical: 15},
-  signup: {padding: 5},
+  body: {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+  },
+  form: {
+    paddingHorizontal: 30,
+    marginTop: 50,
+  },
+  area: {
+    marginVertical: 8,
+  },
+  text: {
+    fontFamily: 'AlegreyaSansSC-Medium',
+    fontSize: 17,
+  },
   input: {
-    paddingHorizontal: 10,
-    paddingVertical: 4,
     borderColor: 'black',
     borderWidth: 1,
-    margin: 5,
     fontSize: 16,
-  },
-
-  text: {
-    color: 'blue',
-    justifyContent: 'center',
-    alignContent: 'center',
-    textAlign: 'center',
-    fontSize: 20,
-    marginTop: 10,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
   },
 });
