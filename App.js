@@ -21,7 +21,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        // initialRouteName={auth().currentUser ? 'Profile' : 'Login'}
+        initialRouteName={auth().currentUser ? 'Profile' : 'Login'}
         screenOptions={{
           headerShown: false,
         }}>

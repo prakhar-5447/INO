@@ -4,12 +4,17 @@ import {
   View,
   Button,
   TextInput,
+  ImageBackground,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import auth from '@react-native-firebase/auth';
 
 const Login = ({navigation}) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   const login_auth = () => {
     auth()
       .signInWithEmailAndPassword(email, password)
@@ -20,12 +25,21 @@ const Login = ({navigation}) => {
         console.log('logged in with :', auth().currentUser.email);
       })
       .catch(error => {
+        createTwoButtonAlert()
         const errorCode = error.code;
-        alert(error.message);
+        // alert(error.message);
       });
   };
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+
+  const createTwoButtonAlert = () =>
+    Alert.alert('Try Again', 'Invalid Email or Password', [
+      {
+        text: 'Dismiss',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+    ]);
+
   return (
     <ImageBackground
       source={require('../../assets/image/bg.jpg')}
@@ -54,19 +68,22 @@ const Login = ({navigation}) => {
               onChangeText={text => setPassword(text.trim())}
             />
           </View>
-          <Text
-            style={[
-              {
-                color: 'blue',
-                fontSize: 25,
-                textAlign: 'right',
-                marginTop: 20,
-                fontFamily: 'AlegreyaSansSC-Medium',
-              },
-            ]}
-            onPress={Login}>
-            Login
-          </Text>
+          <TouchableOpacity
+            disabled={password.length < 6 && email.length !== 0}
+            onPress={login_auth}>
+            <Text
+              style={[
+                {
+                  color: 'blue',
+                  fontSize: 25,
+                  textAlign: 'right',
+                  marginTop: 20,
+                  fontFamily: 'AlegreyaSansSC-Medium',
+                },
+              ]}>
+              Login
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
       <Text
@@ -108,7 +125,7 @@ const styles = StyleSheet.create({
   },
   form: {
     paddingHorizontal: 30,
-    marginTop: 50,
+    marginTop: 200,
   },
   area: {
     marginVertical: 8,
