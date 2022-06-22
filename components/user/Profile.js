@@ -15,10 +15,14 @@ const Profile = ({navigation}) => {
       drawerContent={props => <CustomDrawer {...props} />}
       screenOptions={{
         headerShown: false,
-        drawerActiveBackgroundColor: 'skyblue',
+        drawerActiveBackgroundColor: '#00468E',
         drawerActiveTintColor: 'white',
         drawerInactiveTintColor: 'black',
-        drawerLabelStyle: {marginLeft: -25},
+        drawerLabelStyle: {
+          marginLeft: -20,
+          fontSize: 20,
+          fontFamily: 'AlegreyaSansSC-Medium',
+        },
       }}>
       <Drawer.Screen
         options={{
@@ -26,7 +30,7 @@ const Profile = ({navigation}) => {
             <FontAwesome5
               name={'user-circle'}
               style={[{marginHorizontal: 10}]}
-              size={15}
+              size={18}
               color={color}></FontAwesome5>
           ),
         }}
@@ -39,7 +43,7 @@ const Profile = ({navigation}) => {
             <FontAwesome5
               name={'search'}
               style={[{marginHorizontal: 10}]}
-              size={15}
+              size={18}
               color={color}></FontAwesome5>
           ),
         }}
@@ -65,7 +69,7 @@ const Profile = ({navigation}) => {
             <FontAwesome5
               name={'cog'}
               style={[{marginHorizontal: 10}]}
-              size={15}
+              size={18}
               color={color}></FontAwesome5>
           ),
         }}
