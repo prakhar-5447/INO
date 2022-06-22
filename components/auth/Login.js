@@ -21,13 +21,13 @@ const Login = ({navigation}) => {
       .then(userCredential => {
         // Signed in
         const user = userCredential.user;
-        navigation.replace('Profile');
         console.log('logged in with :', auth().currentUser.email);
+        navigation.replace('Profile');
       })
       .catch(error => {
-        createTwoButtonAlert()
+        // createTwoButtonAlert()
         const errorCode = error.code;
-        // alert(error.message);
+        alert(error.message);
       });
   };
 

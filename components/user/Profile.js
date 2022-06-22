@@ -1,40 +1,77 @@
 import {StyleSheet, Text, Button, View} from 'react-native';
 import React from 'react';
-import auth from '@react-native-firebase/auth';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import User from './User';
 import Search from './Search';
 import Settting from './Settting';
 import Followed from './Project';
+import CustomDrawer from '../mount/CustomDrawer';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const Drawer = createDrawerNavigator();
 const Profile = ({navigation}) => {
-  const logOut = () => {
-    auth()
-      .signOut()
-      .then(() => {
-        console.log('Logged out');
-        if (!auth().currentUser) {
-          navigation.replace('Login');
-        }
-      })
-      .catch(error => {
-        // An error happened.
-        const errorCode = error.code;
-        alert(error.message);
-      });
-  };
-
   return (
     <Drawer.Navigator
+      drawerContent={props => <CustomDrawer {...props} />}
       screenOptions={{
         headerShown: false,
+        drawerActiveBackgroundColor: 'skyblue',
+        drawerActiveTintColor: 'white',
+        drawerInactiveTintColor: 'black',
+        drawerLabelStyle: {marginLeft: -25},
       }}>
-      <Drawer.Screen name="user" component={User} />
-      <Drawer.Screen name="search" component={Search} />
-      <Drawer.Screen name="followed" component={Followed} />
-      <Drawer.Screen name="setting" component={Settting} />
+      <Drawer.Screen
+        options={{
+          drawerIcon: ({color}) => (
+            <FontAwesome5
+              name={'user-circle'}
+              style={[{marginHorizontal: 10}]}
+              size={15}
+              color={color}></FontAwesome5>
+          ),
+        }}
+        name="user"
+        component={User}
+      />
+      <Drawer.Screen
+        options={{
+          drawerIcon: ({color}) => (
+            <FontAwesome5
+              name={'search'}
+              style={[{marginHorizontal: 10}]}
+              size={15}
+              color={color}></FontAwesome5>
+          ),
+        }}
+        name="search"
+        component={Search}
+      />
+      <Drawer.Screen
+        options={{
+          drawerIcon: ({color}) => (
+            <FontAwesome5
+              name={'users'}
+              style={[{marginHorizontal: 10}]}
+              size={15}
+              color={color}></FontAwesome5>
+          ),
+        }}
+        name="followed"
+        component={Followed}
+      />
+      <Drawer.Screen
+        options={{
+          drawerIcon: ({color}) => (
+            <FontAwesome5
+              name={'cog'}
+              style={[{marginHorizontal: 10}]}
+              size={15}
+              color={color}></FontAwesome5>
+          ),
+        }}
+        name="setting"
+        component={Settting}
+      />
     </Drawer.Navigator>
   );
 };
