@@ -27,7 +27,10 @@ const Profile = ({navigation}) => {
   };
 
   return (
-    <Drawer.Navigator>
+    <Drawer.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}>
       <Drawer.Screen name="user" component={User} />
       <Drawer.Screen name="search" component={Search} />
       <Drawer.Screen name="followed" component={Followed} />

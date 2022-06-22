@@ -95,7 +95,7 @@ const Login = ({navigation}) => {
   );
 };
 
-export default Signup;
+export default Login;
 
 const styles = StyleSheet.create({
   image: {
