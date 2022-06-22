@@ -7,7 +7,7 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
@@ -20,6 +20,22 @@ const Signup = ({navigation}) => {
   const [cpassword, setCpassword] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [filePath, setFilePath] = useState(null);
+  const [loading, setlLoading] = useState(false);
+  const [valid, setValid] = useState(false);
+
+  useEffect(() => {
+    if (
+      displayName.length !== 0 &&
+      email.length !== 0 &&
+      password.length > 5 &&
+      password === cpassword
+    ) {
+      var ext = email.slice(email.lastIndexOf('@') + 1,email.length);
+      if (ext === 'gmail.com') {
+        setValid(true);
+      }
+    }
+  }, [displayName, email, password, cpassword]);
 
   const signup_auth = (file_name, ext) => {
     auth()
@@ -40,10 +56,12 @@ const Signup = ({navigation}) => {
           })
           .then(() => {
             console.log('User added!');
+            setlLoading(false);
             navigation.replace('Profile');
           });
       })
       .catch(error => {
+        setlLoading(false);
         var desertRef = storage().refFromURL(
           `https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2FProfilePhoto%2F${file_name}.${ext}?alt=media`,
         );
@@ -78,10 +96,11 @@ const Signup = ({navigation}) => {
 
   const _uploadFile = async e => {
     try {
+      setlLoading(true);
+
       // Check if file selected
       console.log(filePath);
-      if (Object.keys(filePath).length === 0)
-        return alert('Please Select any File');
+      if (!filePath) return alert('Please Select any Image');
 
       // Create Reference
       var ext = filePath.name.substr(filePath.name.lastIndexOf('.') + 1);
@@ -104,6 +123,7 @@ const Signup = ({navigation}) => {
         setFilePath(null);
       });
     } catch (error) {
+      setlLoading(false);
       console.log('Error->', error);
       console.log('task failed');
       alert(`Error-> ${error}`);
@@ -168,7 +188,16 @@ const Signup = ({navigation}) => {
             />
           </View>
           <View style={styles.area}>
-            <Text style={[styles.text]}>Password</Text>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text style={[styles.text]}>Password</Text>
+              {password.length < 6 && (
+                <Text
+                  style={{color: 'grey', fontFamily: 'AlegreyaSansSC-Regular'}}>
+                  Password have atleast 6 characters
+                </Text>
+              )}
+            </View>
             <TextInput
               secureTextEntry={true}
               value={password}
@@ -194,19 +223,20 @@ const Signup = ({navigation}) => {
               onChangeText={text => setCpassword(text.trim())}
             />
           </View>
-          <Text
-            style={[
-              {
-                color: 'blue',
-                fontSize: 25,
-                textAlign: 'right',
-                marginTop: 20,
-                fontFamily: 'AlegreyaSansSC-Medium',
-              },
-            ]}
-            onPress={_uploadFile}>
-            Sign up
-          </Text>
+          <TouchableOpacity disabled={!valid} onPress={_uploadFile}>
+            <Text
+              style={[
+                {
+                  color: 'blue',
+                  fontSize: 25,
+                  textAlign: 'right',
+                  marginTop: 20,
+                  fontFamily: 'AlegreyaSansSC-Medium',
+                },
+              ]}>
+              Sign up
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
       <Text
