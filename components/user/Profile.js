@@ -1,4 +1,4 @@
-import {StyleSheet, Text, Button, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import User from './User';
@@ -9,7 +9,7 @@ import CustomDrawer from '../mount/CustomDrawer';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const Drawer = createDrawerNavigator();
-const Profile = ({navigation}) => {
+const Profile = () => {
   return (
     <Drawer.Navigator
       drawerContent={props => <CustomDrawer {...props} />}

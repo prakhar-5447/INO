@@ -12,9 +12,7 @@ const CustomDrawer = (props, {navigation}) => {
       .signOut()
       .then(() => {
         console.log('Logged out');
-        if (!auth().currentUser) {
-          navigation.replace('Login');
-        }
+        navigation.replace('Login');
       })
       .catch(error => {
         // An error happened.
@@ -48,7 +46,14 @@ const CustomDrawer = (props, {navigation}) => {
         </Text>
       </ImageBackground>
       <DrawerContentScrollView contentContainerStyle={{}} {...props}>
-        <View style={[{flex: 1, marginTop: 25}]}>
+        <View
+          style={[
+            {
+              flex: 1,
+              marginTop: 25,
+              justifyContent: 'center',
+            },
+          ]}>
           <DrawerItemList {...props} />
         </View>
       </DrawerContentScrollView>

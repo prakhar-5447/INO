@@ -12,9 +12,10 @@ import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import auth from '@react-native-firebase/auth';
 import DocumentPicker from 'react-native-document-picker';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import RNFS from 'react-native-fs';
+import Context from '../context/Context';
 
 const User = ({navigation}) => {
   const [link, setLink] = useState('');
@@ -43,6 +44,7 @@ const User = ({navigation}) => {
 
     // console.log(platform);
   };
+  const {get_data} = useContext(Context);
 
   const _chooseFile = async () => {
     // Opening Document Picker to select one file
@@ -156,6 +158,7 @@ const User = ({navigation}) => {
 
   useEffect(() => {
     click();
+    get_data();
   }, []);
 
   return (
