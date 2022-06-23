@@ -14,6 +14,7 @@ const Data = props => {
       'https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2Fdefault.png?alt=media',
   });
   const [platform, setPlatform] = useState([]);
+  const [project, setProject] = useState([]);
 
   const get_data = async () => {
     const userData = await firestore()
@@ -28,6 +29,7 @@ const Data = props => {
       profilePhoto,
       description,
       uid,
+      project,
     } = userData._data;
     setProfile({
       uid,
@@ -38,11 +40,12 @@ const Data = props => {
       description,
     });
     setPlatform(platform);
+    setProject(project);
     // console.log(userData._data);
   };
 
   return (
-    <Context.Provider value={{get_data, profile, platform}}>
+    <Context.Provider value={{get_data, profile, platform,project}}>
       {props.children}
     </Context.Provider>
   );
