@@ -178,54 +178,54 @@ const User = () => {
                   },
                 ]}>
                 <Image
+                  style={[
+                    {
+                      height: 100,
+                    },
+                  ]}
+                  source={{uri: e.imageUri}}
+                />
+                <View style={[{padding: 10}]}>
+                  <Text
+                    onPress={() => Linking.openURL(e.link)}
                     style={[
                       {
-                        height: 100,
+                        fontSize: 15,
+                        color: 'white',
+                        textTransform: 'capitalize',
+                        textAlign: 'left',
+                        paddingBottom: 5,
+                        borderBottomWidth: 1,
+                        borderColor: 'white',
+                        fontFamily: 'AlegreyaSansSC-Medium',
                       },
-                    ]}
-                    source={{uri: e.imageUri}}
-                  />
-                  <View style={[{padding: 10}]}>
+                    ]}>
+                    {e.title}
+                  </Text>
+                  <View
+                    style={[
+                      {
+                        flexDirection: 'row',
+                        marginBottom: 8,
+                      },
+                    ]}>
                     <Text
-                      onPress={() => Linking.openURL(e.link)}
                       style={[
                         {
-                          fontSize: 15,
+                          fontSize: 12,
                           color: 'white',
-                          textTransform: 'capitalize',
                           textAlign: 'left',
-                          paddingBottom: 5,
-                          borderBottomWidth: 1,
-                          borderColor: 'white',
-                          fontFamily: 'AlegreyaSansSC-Medium',
+                          marginVertical: 10,
+                          fontFamily: 'AlegreyaSansSC-Regular',
                         },
                       ]}>
-                      {e.title}
+                      {e.desc.substring(0, 60)}....
                     </Text>
-                    <View
-                      style={[
-                        {
-                          flexDirection: 'row',
-                          marginBottom: 8,
-                        },
-                      ]}>
-                      <Text
-                        style={[
-                          {
-                            fontSize: 12,
-                            color: 'white',
-                            textAlign: 'left',
-                            marginVertical: 10,
-                            fontFamily: 'AlegreyaSansSC-Regular',
-                          },
-                        ]}>
-                        {e.desc.substring(0, 60)}....
-                      </Text>
-                    </View>
                   </View>
                 </View>
-              );
-            })}
+              </View>
+            );
+          })}
         </ScrollView>
       </View>
       {modalVisible && (
@@ -242,6 +242,7 @@ const User = () => {
                 styles.centeredView,
                 {
                   flex: 1,
+                  backgroundColor: '#00000090',
                 },
               ]}>
               <View style={[{backgroundColor: 'white', padding: 35}]}>
