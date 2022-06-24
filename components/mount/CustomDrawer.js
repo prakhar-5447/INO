@@ -1,12 +1,14 @@
 import {StyleSheet, View, Text, ImageBackground, Image} from 'react-native';
-import React from 'react';
+import React, {useContext} from 'react';
 import {
   DrawerContentScrollView,
   DrawerItemList,
 } from '@react-navigation/drawer';
 import auth from '@react-native-firebase/auth';
+import Context from '../context/Context';
 
 const CustomDrawer = (props, {navigation}) => {
+  const {profile} = useContext(Context);
   const logOut = () => {
     auth()
       .signOut()
@@ -29,7 +31,7 @@ const CustomDrawer = (props, {navigation}) => {
         <Image
           style={[{height: 110, width: 110, borderRadius: 100, marginLeft: 10}]}
           source={{
-            uri: 'https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+            uri: profile.profilePhoto,
           }}
         />
         <Text
