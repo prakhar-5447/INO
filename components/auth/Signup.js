@@ -30,7 +30,7 @@ const Signup = ({navigation}) => {
       password.length > 5 &&
       password === cpassword
     ) {
-      var ext = email.slice(email.lastIndexOf('@') + 1,email.length);
+      var ext = email.slice(email.lastIndexOf('@') + 1, email.length);
       if (ext === 'gmail.com') {
         setValid(true);
       }
@@ -50,8 +50,12 @@ const Signup = ({navigation}) => {
           .doc(user.uid)
           .set({
             email: email,
+            phoneNumber: '',
+            description: '',
             displayName: displayName.toLowerCase().trim(),
             uid: user.uid,
+            platform: {},
+            project: [],
             profilePhoto: `https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2FProfilePhoto%2F${file_name}.${ext}?alt=media`,
           })
           .then(() => {
