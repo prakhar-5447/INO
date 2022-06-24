@@ -2,9 +2,11 @@ import {
   StyleSheet,
   Text,
   View,
+  Modal,
   TouchableOpacity,
   Image,
   ScrollView,
+  Alert,
   TextInput,
   Linking,
 } from 'react-native';
@@ -18,6 +20,7 @@ import RNFS from 'react-native-fs';
 import Context from '../context/Context';
 
 const User = ({navigation}) => {
+  const [modalVisible, setModalVisible] = useState(false);
   const {get_data, profile, platform, project} = useContext(Context);
 
   const addSocial = platform => {
@@ -54,7 +57,10 @@ const User = ({navigation}) => {
               },
             ]}>
             <Text style={[styles.titles, {marginRight: 5}]}>Socials</Text>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setModalVisible(true);
+              }}>
               <FontAwesome5
                 name={'plus-circle'}
                 size={14}
@@ -163,7 +169,7 @@ const User = ({navigation}) => {
                 key={i}
                 style={[
                   {
-                    width: 180,
+                    width: 170,
                     backgroundColor: '#2FC1E4',
                     marginBottom: 10,
                   },
@@ -219,6 +225,31 @@ const User = ({navigation}) => {
           })}
         </ScrollView>
       </View>
+      {modalVisible && (
+        <View style={[styles.centeredView]}>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(false);
+            }}>
+            <View
+              style={[
+                styles.centeredView,
+                {
+                  flex: 1,
+                },
+              ]}>
+              <View style={[{backgroundColor: 'black', margin: 20}]}>
+                <Text style={[{color: 'white', padding: 20}]}>
+                  okdkaaskokds
+                </Text>
+              </View>
+            </View>
+          </Modal>
+        </View>
+      )}
     </View>
   );
 };
@@ -264,5 +295,9 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     paddingHorizontal: 20,
     paddingTop: 20,
+  },
+  centeredView: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
