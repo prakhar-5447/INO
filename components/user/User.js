@@ -166,19 +166,18 @@ const User = () => {
               justifyContent: 'space-between',
             },
           ]}>
-          {project &&
-            project.map(function (e, i) {
-              return (
-                <View
-                  key={i}
-                  style={[
-                    {
-                      width: 170,
-                      backgroundColor: '#2FC1E4',
-                      marginBottom: 10,
-                    },
-                  ]}>
-                  <Image
+          {project.map(function (e, i) {
+            return (
+              <View
+                key={i}
+                style={[
+                  {
+                    width: 170,
+                    backgroundColor: '#2FC1E4',
+                    marginBottom: 14,
+                  },
+                ]}>
+                <Image
                     style={[
                       {
                         height: 100,
