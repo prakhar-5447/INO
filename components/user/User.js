@@ -76,6 +76,7 @@ const User = ({navigation}) => {
                 textAlign: 'center',
                 fontSize: 30,
                 fontFamily: 'AlegreyaSansSC-Medium',
+                color: 'black',
               },
             ]}>
             {profile.displayName}
@@ -117,6 +118,7 @@ const User = ({navigation}) => {
                 textAlign: 'center',
                 fontSize: 18,
                 fontFamily: 'AlegreyaSansSC-Regular',
+                color: 'black',
               },
             ]}>
             {profile.description}
@@ -136,7 +138,13 @@ const User = ({navigation}) => {
           <Text style={[styles.titles, {marginBottom: 0}]}>Project</Text>
           <TouchableOpacity>
             <Text
-              style={[{fontSize: 18, fontFamily: 'AlegreyaSansSC-Regular'}]}>
+              style={[
+                {
+                  fontSize: 18,
+                  fontFamily: 'AlegreyaSansSC-Regular',
+                  color: 'black',
+                },
+              ]}>
               Add new
             </Text>
           </TouchableOpacity>
@@ -228,14 +236,17 @@ const styles = StyleSheet.create({
     fontFamily: 'AlegreyaSansSC-Medium',
     fontSize: 25,
     marginBottom: 5,
+    color: 'black',
   },
   links: {
     borderLeftWidth: 1.5,
     paddingLeft: 10,
+    color: 'black',
   },
   link: {
     fontFamily: 'AlegreyaSansSC-Regular',
     fontSize: 18,
+    color: 'black',
   },
   others: {
     borderRightWidth: 1.5,
