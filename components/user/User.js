@@ -19,19 +19,21 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import RNFS from 'react-native-fs';
 import Context from '../context/Context';
 
-const User = ({navigation}) => {
+const User = () => {
+  const [socials, setSocials] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const {get_data, profile, platform, project} = useContext(Context);
 
-  const addSocial = platform => {
+  const set_social = () => {
     firestore()
       .collection('Users')
       .doc(auth().currentUser.uid)
-      .set({
-        platform: platform,
+      .update({
+        platform: socials,
       })
       .then(() => {
         get_data();
+        setModalVisible(false);
       });
   };
 
@@ -59,6 +61,7 @@ const User = ({navigation}) => {
             <Text style={[styles.titles, {marginRight: 5}]}>Socials</Text>
             <TouchableOpacity
               onPress={() => {
+                setSocials(platform);
                 setModalVisible(true);
               }}>
               <FontAwesome5
@@ -163,66 +166,67 @@ const User = ({navigation}) => {
               justifyContent: 'space-between',
             },
           ]}>
-          {project.map(function (e, i) {
-            return (
-              <View
-                key={i}
-                style={[
-                  {
-                    width: 170,
-                    backgroundColor: '#2FC1E4',
-                    marginBottom: 10,
-                  },
-                ]}>
-                <Image
+          {project &&
+            project.map(function (e, i) {
+              return (
+                <View
+                  key={i}
                   style={[
                     {
-                      height: 100,
+                      width: 170,
+                      backgroundColor: '#2FC1E4',
+                      marginBottom: 10,
                     },
-                  ]}
-                  source={{uri: e.imageUri}}
-                />
-                <View style={[{padding: 10}]}>
-                  <Text
-                    onPress={() => Linking.openURL(e.link)}
+                  ]}>
+                  <Image
                     style={[
                       {
-                        fontSize: 15,
-                        color: 'white',
-                        textTransform: 'capitalize',
-                        textAlign: 'left',
-                        paddingBottom: 5,
-                        borderBottomWidth: 1,
-                        borderColor: 'white',
-                        fontFamily: 'AlegreyaSansSC-Medium',
+                        height: 100,
                       },
-                    ]}>
-                    {e.title}
-                  </Text>
-                  <View
-                    style={[
-                      {
-                        flexDirection: 'row',
-                        marginBottom: 8,
-                      },
-                    ]}>
+                    ]}
+                    source={{uri: e.imageUri}}
+                  />
+                  <View style={[{padding: 10}]}>
                     <Text
+                      onPress={() => Linking.openURL(e.link)}
                       style={[
                         {
-                          fontSize: 12,
+                          fontSize: 15,
                           color: 'white',
+                          textTransform: 'capitalize',
                           textAlign: 'left',
-                          marginVertical: 10,
-                          fontFamily: 'AlegreyaSansSC-Regular',
+                          paddingBottom: 5,
+                          borderBottomWidth: 1,
+                          borderColor: 'white',
+                          fontFamily: 'AlegreyaSansSC-Medium',
                         },
                       ]}>
-                      {e.desc.substring(0, 60)}....
+                      {e.title}
                     </Text>
+                    <View
+                      style={[
+                        {
+                          flexDirection: 'row',
+                          marginBottom: 8,
+                        },
+                      ]}>
+                      <Text
+                        style={[
+                          {
+                            fontSize: 12,
+                            color: 'white',
+                            textAlign: 'left',
+                            marginVertical: 10,
+                            fontFamily: 'AlegreyaSansSC-Regular',
+                          },
+                        ]}>
+                        {e.desc.substring(0, 60)}....
+                      </Text>
+                    </View>
                   </View>
                 </View>
-              </View>
-            );
-          })}
+              );
+            })}
         </ScrollView>
       </View>
       {modalVisible && (
@@ -241,10 +245,75 @@ const User = ({navigation}) => {
                   flex: 1,
                 },
               ]}>
-              <View style={[{backgroundColor: 'black', margin: 20}]}>
-                <Text style={[{color: 'white', padding: 20}]}>
-                  okdkaaskokds
-                </Text>
+              <View style={[{backgroundColor: 'white', padding: 35}]}>
+                <View>
+                  <Text style={[styles.inputTitle]}>Instagram</Text>
+                  <TextInput
+                    value={socials.instagram}
+                    onChangeText={text => {
+                      setSocials({...socials, instagram: text});
+                    }}
+                    style={[styles.input]}></TextInput>
+                </View>
+                <View>
+                  <Text style={[styles.inputTitle]}>Twitter</Text>
+                  <TextInput
+                    value={socials.twitter}
+                    onChangeText={text => {
+                      setSocials({...socials, twitter: text});
+                    }}
+                    style={[styles.input]}></TextInput>
+                </View>
+                <View>
+                  <Text style={[styles.inputTitle]}>Github</Text>
+                  <TextInput
+                    value={socials.github}
+                    onChangeText={text => {
+                      setSocials({...socials, github: text});
+                    }}
+                    style={[styles.input]}></TextInput>
+                </View>
+                <View>
+                  <Text style={[styles.inputTitle]}>LinkedIn</Text>
+                  <TextInput
+                    value={socials.linkedin}
+                    onChangeText={text => {
+                      setSocials({...socials, linkedin: text});
+                    }}
+                    style={[styles.input]}></TextInput>
+                </View>
+                <View>
+                  <Text style={[styles.inputTitle]}>Portfolio</Text>
+                  <TextInput
+                    value={socials.portfolio}
+                    onChangeText={text => {
+                      setSocials({...socials, portfolio: text});
+                    }}
+                    style={[styles.input]}></TextInput>
+                </View>
+                <View>
+                  <Text style={[styles.inputTitle]}>Other</Text>
+                  <TextInput
+                    value={socials.other}
+                    onChangeText={text => {
+                      setSocials({...socials, other: text});
+                    }}
+                    style={[styles.input]}></TextInput>
+                </View>
+                <View style={[{marginTop: 5}]}>
+                  <TouchableOpacity onPress={set_social}>
+                    <Text
+                      style={[
+                        {
+                          fontFamily: 'AlegreyaSansSC-Medium',
+                          textAlign: 'right',
+                          fontSize: 30,
+                        },
+                      ]}>
+                      Save
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           </Modal>
@@ -299,5 +368,16 @@ const styles = StyleSheet.create({
   centeredView: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  inputTitle: {
+    fontFamily: 'AlegreyaSansSC-Regular',
+    fontSize: 20,
+    marginBottom: 2,
+  },
+  input: {
+    borderWidth: 1,
+    width: 280,
+    padding: 10,
+    marginBottom: 5,
   },
 });

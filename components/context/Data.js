@@ -13,7 +13,7 @@ const Data = props => {
     profilePhoto:
       'https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2Fdefault.png?alt=media',
   });
-  const [platform, setPlatform] = useState([]);
+  const [platform, setPlatform] = useState({});
   const [project, setProject] = useState([]);
 
   const get_data = async () => {
@@ -45,7 +45,7 @@ const Data = props => {
   };
 
   return (
-    <Context.Provider value={{get_data, profile, platform,project}}>
+    <Context.Provider value={{get_data, profile, platform, project}}>
       {props.children}
     </Context.Provider>
   );
