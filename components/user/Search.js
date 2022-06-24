@@ -9,20 +9,21 @@ import {
   TouchableOpacity,
   TextInput,
   Linking,
+  ImageBackground,
 } from 'react-native';
-import React, {useState} from 'react';
-import storage from '@react-native-firebase/storage';
+import React, {useContext, useEffect, useState} from 'react';
 import firestore from '@react-native-firebase/firestore';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Context from '../context/Context';
 
 const Search = () => {
-  const [allId, setAllId] = useState([]);
+  const {profile} = useContext(Context);
+  const [allUser, setAllUser] = useState([]);
+  const [user, setUser] = useState([]);
 
-  const find = e => {
+  const fetchAll = () => {
     const result = [];
     firestore()
       .collection('Users')
-      .where('displayName', '==', e.toLowerCase())
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
@@ -30,149 +31,82 @@ const Search = () => {
           result.push(doc.data());
         });
         console.log(result);
-        setAllId(result);
+        setAllUser(result);
       });
   };
 
-  function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  }
+  fetch = text => {
+    let temp = allUser.filter(e => {
+      return e.displayName.includes(text) && e.uid !== profile.uid;
+    });
+    setUser(temp);
+  };
+
+  useEffect(() => {
+    fetchAll();
+  }, []);
 
   return (
-    <View>
-      <View style={[{alignItems: 'center', margin: 10}]}>
-        <View style={[{flexDirection: 'row'}]}>
-          <TextInput
-            style={[styles.input, {flex: 1}]}
-            onChangeText={text => {
-              find(text.trim());
-            }}
-            placeholder={'Enter name'}
-          />
-        </View>
-      </View>
-      <ScrollView>
-        <View
-          style={[
-            {
-              marginVertical: 10,
-              marginHorizontal: 20,
-            },
-          ]}>
-          {allId &&
-            allId.map((e, i) => {
-              return (
-                <View
-                  key={i}
+    <ImageBackground
+      resizeMode="cover"
+      source={require('../../assets/image/search_bg.jpg')}
+      style={[styles.image]}>
+      <TextInput
+        onChangeText={text => {
+          if (text.trim().length) {
+            fetch(text.toLowerCase());
+          } else {
+            setUser([]);
+          }
+        }}
+        style={[{backgroundColor: 'white', borderRadius: 5}]}></TextInput>
+      <ScrollView style={[{flex: 1, paddingVertical: 20}]}>
+        {user.length > 0 &&
+          user.map((e, i) => (
+            <View key={i} style={[{flexDirection: 'row', marginVertical: 10}]}>
+              <Image
+                style={[
+                  {
+                    height: 75,
+                    width: 75,
+                    borderRadius: 40,
+                    borderWidth: 0.5,
+                    borderColor: 'black',
+                  },
+                ]}
+                source={{uri: e.profilePhoto}}></Image>
+              <View
+                style={[
+                  {
+                    marginHorizontal: 10,
+                    justifyContent: 'center',
+                    marginLeft: 20,
+                  },
+                ]}>
+                <Text
                   style={[
-                    {
-                      marginVertical: 8,
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      borderWidth: 1,
-                      borderColor: getRandomColor(),
-                      backgroundColor: 'white',
-                      borderTopLeftRadius: 100,
-                      borderBottomLeftRadius: 100,
-                    },
+                    {fontFamily: 'AlegreyaSansSC-Regular', fontSize: 20},
                   ]}>
-                  <Image
-                    style={[
-                      {width: 80, height: 80, margin: 3, borderRadius: 100},
-                    ]}
-                    source={{uri: e.profilePhoto}}
-                  />
-                  <View
-                    style={[
-                      {
-                        alignItems: 'flex-end',
-                        justifyContent: 'space-between',
-                        paddingRight: 8,
-                        marginBottom: 4,
-                      },
-                    ]}>
-                    <View
-                      style={[
-                        {
-                          alignItems: 'flex-end',
-                        },
-                      ]}>
-                      <Text
-                        style={[{fontSize: 26, textTransform: 'uppercase'}]}>
-                        {e.displayName}
-                      </Text>
-                      <Text style={[{fontSize: 14}]}>{e.email}</Text>
-                      <Text style={[{fontSize: 14}]}>{e.phoneNumber}</Text>
-                      <View
-                        style={[
-                          {
-                            flexDirection: 'row',
-                            maxWidth: 200,
-                            flexWrap: 'wrap',
-                            marginTop: 2,
-                            justifyContent: 'flex-end',
-                          },
-                        ]}>
-                        {e.platform &&
-                          e.platform.map((item, i) => {
-                            return (
-                              <Text
-                                style={[
-                                  {
-                                    marginHorizontal: 2,
-                                    textTransform: 'uppercase',
-                                    color: 'blue',
-                                    fontSize: 12,
-                                  },
-                                ]}
-                                key={i}
-                                onPress={() => {
-                                  Linking.openURL(item.link);
-                                }}>
-                                {item.social}
-                              </Text>
-                            );
-                          })}
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              );
-            })}
-        </View>
+                  {e.displayName}
+                </Text>
+                <Text style={[{fontFamily: 'AlegreyaSansSC-Regular'}]}>
+                  {e.description.substring(0, 40)}...
+                </Text>
+              </View>
+            </View>
+          ))}
       </ScrollView>
-    </View>
+    </ImageBackground>
   );
 };
 
 export default Search;
 
 const styles = StyleSheet.create({
-  buttonStyle: {
-    alignItems: 'center',
-    padding: 10,
-    width: 150,
-    marginTop: 16,
-    borderColor: 'orange',
-    borderWidth: 2,
-    borderRadius: 10,
-  },
-  buttonTextStyle: {
-    fontWeight: 'bold',
-  },
-  input: {
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderColor: 'black',
-    borderWidth: 1,
-    margin: 5,
-    fontSize: 14,
-    borderRadius: 8,
+  image: {
+    flex: 1,
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingTop: 20,
   },
 });

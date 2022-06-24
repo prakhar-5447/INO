@@ -155,9 +155,9 @@ const User = ({navigation}) => {
                 key={i}
                 style={[
                   {
-                    width: 180,
+                    width: 170,
                     backgroundColor: '#2FC1E4',
-                    marginBottom: 10,
+                    marginBottom: 14,
                   },
                 ]}>
                 <Image
