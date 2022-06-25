@@ -22,6 +22,14 @@ import Context from '../context/Context';
 const User = () => {
   const [socials, setSocials] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
+  const [projectModal, setProjectModal] = useState(false);
+  const [projectInfo, setProjectInfo] = useState({
+    desc: '',
+    imageuri: '',
+    link: '',
+    title: '',
+  });
+  const [filePath, setFilePath] = useState(null);
   const {get_data, profile, platform, project} = useContext(Context);
 
   const set_social = () => {
@@ -35,6 +43,112 @@ const User = () => {
         get_data();
         setModalVisible(false);
       });
+  };
+
+
+  // const deletProject = e => {
+  //   // Create a reference to the file to delete
+  //   var desertRef = storage().refFromURL(e.imageUri);
+
+  //   // Delete the file
+  //   desertRef
+  //     .delete()
+  //     .then(function () {
+  //       // File deleted successfully
+  //       firestore()
+  //         .collection('Users')
+  //         .doc(auth().currentUser.uid)
+  //         .update({
+  //           project: firestore.FieldValue.arrayRemove(e),
+  //         })
+  //         .then(() => {
+  //           // console.log('Social deleted');
+  //           click();
+  //         });
+  //     })
+  //     .catch(function (error) {
+  //       alert(error);
+  //     });
+  // };
+
+
+  const _chooseFile = async () => {
+    // Opening Document Picker to select one file
+    try {
+      const fileDetails = await DocumentPicker.pick({
+        // Provide which type of file you want user to pick
+        type: [DocumentPicker.types.allFiles],
+      });
+      console.log('fileDetails : ' + JSON.stringify(fileDetails));
+      // Setting the state for selected File
+      setFilePath(fileDetails[0]);
+    } catch (error) {
+      setFilePath({});
+      // If user canceled the document selection
+      alert(
+        DocumentPicker.isCancel(error)
+          ? 'Canceled'
+          : 'Unknown Error: ' + JSON.stringify(error),
+      );
+    }
+  };
+
+  const _uploadFile = async () => {
+    try {
+      const timestamp = new Date().getTime();
+
+      // Check if file selected
+      console.log(filePath);
+      if (!filePath) return alert('Please Select any Image');
+
+      // Create Reference
+      var ext = filePath.name.substr(filePath.name.lastIndexOf('.') + 1);
+      console.log(ext);
+      const reference = storage().ref(
+        `/myFiles/${auth().currentUser.uid}/project-${timestamp}.${ext}`,
+      );
+
+      //Put File
+      const data = await RNFS.readFile(filePath.uri, 'base64');
+      const task = reference.putString(data, 'base64');
+
+      task.on('state_changed', taskSnapshot => {
+        console.log(
+          `${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`,
+        );
+      });
+      task.then(() => {
+        firestore()
+          .collection('Users')
+          .doc(auth().currentUser.uid)
+          .update({
+            project: firestore.FieldValue.arrayUnion({
+              title: projectInfo.title.trim().toLowerCase(),
+              link: projectInfo.link.trim(),
+              desc: projectInfo.desc.trim(),
+              imageUri: `https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2F${
+                auth().currentUser.uid
+              }%2Fproject-${timestamp}.${ext}?alt=media`,
+            }),
+          })
+          .then(() => {
+            console.log('New Project added');
+          });
+        setProjectInfo({
+          desc: '',
+          imageuri: '',
+          link: '',
+          title: '',
+        });
+        setProjectModal(false);
+        get_data();
+        setFilePath(null);
+      });
+    } catch (error) {
+      console.log('Error->', error);
+      console.log('task failed');
+      alert(`Error-> ${error}`);
+    }
   };
 
   useEffect(() => {
@@ -145,7 +259,10 @@ const User = () => {
             },
           ]}>
           <Text style={[styles.titles, {marginBottom: 0}]}>Project</Text>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setProjectModal(true);
+            }}>
             <Text
               style={[
                 {
@@ -319,6 +436,100 @@ const User = () => {
           </Modal>
         </View>
       )}
+      {projectModal && (
+        <View style={[styles.centeredView]}>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={projectModal}
+            onRequestClose={() => {
+              setProjectModal(false);
+            }}>
+            <View
+              style={[
+                styles.centeredView,
+                {
+                  flex: 1,
+                  backgroundColor: '#00000090',
+                },
+              ]}>
+              <View style={[{backgroundColor: 'white', padding: 35}]}>
+                <TouchableOpacity onPress={_chooseFile}>
+                  <View
+                    style={[
+                      {
+                        borderWidth: 1,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: 180,
+                        marginBottom: 10,
+                      },
+                    ]}>
+                    {filePath ? (
+                      <Image
+                        style={{
+                          height: '100%',
+                          width: '100%',
+                        }}
+                        source={{uri: filePath.uri}}></Image>
+                    ) : (
+                      <Text style={[styles.inputTitle]}>
+                        Select an Image to Preview
+                      </Text>
+                    )}
+                  </View>
+                </TouchableOpacity>
+                <View>
+                  <Text style={[styles.inputTitle]}>Title</Text>
+                  <TextInput
+                    value={projectInfo.title}
+                    onChangeText={text => {
+                      setProjectInfo({...projectInfo, title: text});
+                    }}
+                    style={[styles.input]}></TextInput>
+                </View>
+                <View>
+                  <Text style={[styles.inputTitle]}>Link</Text>
+                  <TextInput
+                    placeholder="Github repository here"
+                    value={projectInfo.link}
+                    onChangeText={text => {
+                      setProjectInfo({...projectInfo, link: text});
+                    }}
+                    style={[styles.input]}></TextInput>
+                </View>
+                <View>
+                  <Text style={[styles.inputTitle]}>Description</Text>
+                  <TextInput
+                    placeholder="Write something about your porject"
+                    multiline={true}
+                    maxLength={200}
+                    numberOfLines={5}
+                    value={projectInfo.desc}
+                    onChangeText={text => {
+                      setProjectInfo({...projectInfo, desc: text});
+                    }}
+                    style={[styles.input, {paddingVertical: 30}]}></TextInput>
+                </View>
+                <View style={[{marginTop: 5}]}>
+                  <TouchableOpacity onPress={_uploadFile}>
+                    <Text
+                      style={[
+                        {
+                          fontFamily: 'AlegreyaSansSC-Medium',
+                          textAlign: 'right',
+                          fontSize: 30,
+                        },
+                      ]}>
+                      Save
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
+        </View>
+      )}
     </View>
   );
 };
@@ -379,5 +590,6 @@ const styles = StyleSheet.create({
     width: 280,
     padding: 10,
     marginBottom: 5,
+    fontFamily: 'AlegreyaSansSC-Regular',
   },
 });
