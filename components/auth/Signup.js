@@ -56,6 +56,7 @@ const Signup = ({navigation}) => {
             uid: user.uid,
             platform: {},
             project: [],
+            followed: [],
             profilePhoto: `https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2FProfilePhoto%2F${file_name}.${ext}?alt=media`,
           })
           .then(() => {

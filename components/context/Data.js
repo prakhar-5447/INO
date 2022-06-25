@@ -15,6 +15,7 @@ const Data = props => {
   });
   const [platform, setPlatform] = useState({});
   const [project, setProject] = useState([]);
+  const [followed, setFollowed] = useState([]);
 
   const get_data = async () => {
     const userData = await firestore()
@@ -30,6 +31,7 @@ const Data = props => {
       description,
       uid,
       project,
+      followed,
     } = userData._data;
     setProfile({
       uid,
@@ -41,11 +43,12 @@ const Data = props => {
     });
     setPlatform(platform);
     setProject(project);
+    setFollowed(followed);
     // console.log(userData._data);
   };
 
   return (
-    <Context.Provider value={{get_data, profile, platform, project}}>
+    <Context.Provider value={{get_data, profile, followed, platform, project}}>
       {props.children}
     </Context.Provider>
   );

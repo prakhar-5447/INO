@@ -4,7 +4,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import User from './User';
 import Search from './Search';
 import Settting from './Settting';
-import Followed from './Project';
+import Followed from './Followed';
 import CustomDrawer from '../mount/CustomDrawer';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
