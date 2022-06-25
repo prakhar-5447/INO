@@ -30,7 +30,6 @@ const Search = () => {
           // console.log('MedData', doc.data().platform);
           result.push(doc.data());
         });
-        console.log(result);
         setAllUser(result);
       });
   };
@@ -80,7 +79,8 @@ const Search = () => {
                   {
                     marginHorizontal: 10,
                     justifyContent: 'center',
-                    marginLeft: 20,
+                    marginLeft: 12,
+                    paddingBottom: 16,
                   },
                 ]}>
                 <Text
@@ -89,7 +89,10 @@ const Search = () => {
                   ]}>
                   {e.displayName}
                 </Text>
-                <Text style={[{fontFamily: 'AlegreyaSansSC-Regular'}]}>
+                <Text
+                  style={[
+                    {fontFamily: 'AlegreyaSansSC-Regular', fontSize: 12},
+                  ]}>
                   {e.description.substring(0, 40)}...
                 </Text>
               </View>
