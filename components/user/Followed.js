@@ -14,33 +14,31 @@ import React, {useState, useContext, useEffect} from 'react';
 import firestore from '@react-native-firebase/firestore';
 import Context from '../context/Context';
 
-const Followed = () => {
-  let temp = [];
+const Followed = ({navigation}) => {
   const [follow, setFollow] = useState([]);
-  const {followed, profile} = useContext(Context);
+  const {followed} = useContext(Context);
 
-  const fetch = async () => {
-    followed.forEach(e => {
-      firestore()
-        .collection('Users')
-        .doc(e)
-        .get()
-        .then(querySnapShot => {
-          const data = querySnapShot._data;
-          if (data.uid !== profile.uid) temp.push(data);
+  const fetch = () => {
+    const result = [];
+    firestore()
+      .collection('Users')
+      .where(firestore.FieldPath.documentId(), 'in', followed)
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          // console.log('MedData', doc.data().platform);
+          result.push(doc.data());
         });
-    });
+        setFollow(result);
+      });
   };
 
   useEffect(() => {
     fetch();
-    setTimeout(() => {
-      setFollow(temp);
-    }, 2000);
   }, []);
 
   return (
-    <View style={[styles.follow]}>
+    <View style={[styles.follows]}>
       <Text style={[{fontFamily: 'AlegreyaSansSC-Regular', fontSize: 22}]}>
         followed
       </Text>
@@ -71,6 +69,7 @@ const Followed = () => {
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   alignItems: 'center',
+                  width: '75%',
                 },
               ]}>
               <View
@@ -96,16 +95,18 @@ const Followed = () => {
                 </Text>
               </View>
               <Text
+                onPress={() => {
+                  navigation.navigate('View', {user: e});
+                }}
                 style={[
                   {
                     fontFamily: 'AlegreyaSansSC-Regular',
                     paddingBottom: 35,
                     fontSize: 16,
                     color: '#1A5899',
-                    marginLeft: 10,
                   },
                 ]}>
-                view
+                View
               </Text>
             </View>
           </View>
@@ -118,7 +119,7 @@ const Followed = () => {
 export default Followed;
 
 const styles = StyleSheet.create({
-  follow: {
+  follows: {
     flex: 1,
     justifyContent: 'space-between',
     paddingHorizontal: 20,
