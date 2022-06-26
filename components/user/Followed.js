@@ -1,22 +1,13 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  ScrollView,
-  Button,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  Linking,
-} from 'react-native';
+import {StyleSheet, Text, View, ScrollView, Image} from 'react-native';
 import React, {useState, useContext, useEffect} from 'react';
 import firestore from '@react-native-firebase/firestore';
 import Context from '../context/Context';
+import {useIsFocused} from '@react-navigation/native';
 
 const Followed = ({navigation}) => {
   const [follow, setFollow] = useState([]);
   const {followed} = useContext(Context);
+  const isFocused = useIsFocused();
 
   const fetch = () => {
     const result = [];
@@ -35,7 +26,7 @@ const Followed = ({navigation}) => {
 
   useEffect(() => {
     fetch();
-  }, []);
+  }, [isFocused]);
 
   return (
     <View style={[styles.follows]}>
@@ -121,7 +112,6 @@ export default Followed;
 const styles = StyleSheet.create({
   follows: {
     flex: 1,
-    justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingTop: 20,
   },

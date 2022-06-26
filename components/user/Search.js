@@ -14,11 +14,14 @@ import {
 import React, {useContext, useEffect, useState} from 'react';
 import firestore from '@react-native-firebase/firestore';
 import Context from '../context/Context';
+import {useIsFocused} from '@react-navigation/native';
 
-const Search = () => {
+const Search = ({navigation}) => {
   const {profile} = useContext(Context);
   const [allUser, setAllUser] = useState([]);
+  const [search, setSearch] = useState();
   const [user, setUser] = useState([]);
+  const isFocused = useIsFocused();
 
   const fetchAll = () => {
     const result = [];
@@ -43,7 +46,7 @@ const Search = () => {
 
   useEffect(() => {
     fetchAll();
-  }, []);
+  }, [isFocused]);
 
   return (
     <ImageBackground
@@ -51,7 +54,9 @@ const Search = () => {
       source={require('../../assets/image/search_bg.jpg')}
       style={[styles.image]}>
       <TextInput
+        value={search}
         onChangeText={text => {
+          setSearch(text);
           if (text.trim().length) {
             fetch(text.toLowerCase());
           } else {
@@ -62,7 +67,12 @@ const Search = () => {
       <ScrollView style={[{flex: 1, paddingVertical: 20}]}>
         {user.length > 0 &&
           user.map((e, i) => (
-            <View key={i} style={[{flexDirection: 'row', marginVertical: 10}]}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('View', {user: e});
+              }}
+              key={i}
+              style={[{flexDirection: 'row', marginVertical: 10}]}>
               <Image
                 style={[
                   {
@@ -96,7 +106,7 @@ const Search = () => {
                   {e.description.substring(0, 40)}...
                 </Text>
               </View>
-            </View>
+            </TouchableOpacity>
           ))}
       </ScrollView>
     </ImageBackground>
