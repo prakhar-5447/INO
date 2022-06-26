@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
-  Alert,
   TextInput,
   Linking,
 } from 'react-native';
@@ -21,11 +20,13 @@ import Context from '../context/Context';
 
 const User = () => {
   const [socials, setSocials] = useState({});
-  const [modalVisible, setModalVisible] = useState(false);
-  const [projectModal, setProjectModal] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false); //social modal
+  const [projectModal, setProjectModal] = useState(false); //project add modal
+  const [projectInfoModal, setProjectInfoModal] = useState(false); //individual project info modal
+  const [openProject, setOpenProject] = useState({}); //individual project info modal data
   const [projectInfo, setProjectInfo] = useState({
     desc: '',
-    imageuri: '',
+    imageUri: '',
     link: '',
     title: '',
   });
@@ -45,32 +46,31 @@ const User = () => {
       });
   };
 
+  const deleteProject = e => {
+    // Create a reference to the file to delete
+    var desertRef = storage().refFromURL(e.imageUri);
 
-  // const deletProject = e => {
-  //   // Create a reference to the file to delete
-  //   var desertRef = storage().refFromURL(e.imageUri);
-
-  //   // Delete the file
-  //   desertRef
-  //     .delete()
-  //     .then(function () {
-  //       // File deleted successfully
-  //       firestore()
-  //         .collection('Users')
-  //         .doc(auth().currentUser.uid)
-  //         .update({
-  //           project: firestore.FieldValue.arrayRemove(e),
-  //         })
-  //         .then(() => {
-  //           // console.log('Social deleted');
-  //           click();
-  //         });
-  //     })
-  //     .catch(function (error) {
-  //       alert(error);
-  //     });
-  // };
-
+    setProjectInfoModal(false);
+    // Delete the file
+    desertRef
+      .delete()
+      .then(function () {
+        // File deleted successfully
+        firestore()
+          .collection('Users')
+          .doc(auth().currentUser.uid)
+          .update({
+            project: firestore.FieldValue.arrayRemove(e),
+          })
+          .then(() => {
+            // console.log('Social deleted');
+            get_data();
+          });
+      })
+      .catch(function (error) {
+        alert(error);
+      });
+  };
 
   const _chooseFile = async () => {
     // Opening Document Picker to select one file
@@ -136,7 +136,7 @@ const User = () => {
           });
         setProjectInfo({
           desc: '',
-          imageuri: '',
+          imageUri: '',
           link: '',
           title: '',
         });
@@ -285,7 +285,11 @@ const User = () => {
           ]}>
           {project.map(function (e, i) {
             return (
-              <View
+              <TouchableOpacity
+                onPress={() => {
+                  setOpenProject(e);
+                  setProjectInfoModal(true);
+                }}
                 key={i}
                 style={[
                   {
@@ -340,7 +344,7 @@ const User = () => {
                     </Text>
                   </View>
                 </View>
-              </View>
+              </TouchableOpacity>
             );
           })}
         </ScrollView>
@@ -523,6 +527,105 @@ const User = () => {
                       ]}>
                       Save
                     </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
+        </View>
+      )}
+      {projectInfoModal && (
+        <View style={[styles.centeredView]}>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={projectInfoModal}
+            onRequestClose={() => {
+              setProjectInfoModal(false);
+            }}>
+            <View
+              style={[
+                styles.centeredView,
+                {
+                  flex: 1,
+                  backgroundColor: '#00000090',
+                  paddingHorizontal: 40,
+                },
+              ]}>
+              <View style={[{backgroundColor: 'white'}]}>
+                <View
+                  style={[
+                    {
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: 200,
+                    },
+                  ]}>
+                  <Image
+                    style={{
+                      height: '100%',
+                      width: '100%',
+                    }}
+                    source={{uri: openProject.imageUri}}></Image>
+                </View>
+                <View>
+                  <Text
+                    style={[
+                      styles.inputTitle,
+                      {
+                        textAlign: 'center',
+                        borderBottomWidth: 1,
+                        color: 'black',
+                        paddingBottom: 5,
+                        fontSize: 50,
+                      },
+                    ]}>
+                    {openProject.title}
+                  </Text>
+                </View>
+                <View>
+                  <Text
+                    style={[
+                      styles.inputTitle,
+                      {
+                        textAlign: 'center',
+                        color: 'black',
+                        fontSize: 20,
+                        paddingHorizontal: 50,
+                        marginTop: 30,
+                        marginBottom: 60,
+                      },
+                    ]}>
+                    {openProject.desc}
+                  </Text>
+                </View>
+                <View
+                  style={[
+                    {
+                      justifyContent: 'space-between',
+                      flexDirection: 'row',
+                      marginTop: 50,
+                      marginBottom: 20,
+                      marginHorizontal: 20,
+                    },
+                  ]}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      deleteProject(openProject);
+                    }}>
+                    <FontAwesome5
+                      name={'trash'}
+                      size={14}
+                      color={'black'}></FontAwesome5>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      Linking.openURL(openProject.link);
+                    }}>
+                    <FontAwesome5
+                      name={'angle-right'}
+                      size={20}
+                      color={'#2FC1E4'}></FontAwesome5>
                   </TouchableOpacity>
                 </View>
               </View>
