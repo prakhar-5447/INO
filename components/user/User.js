@@ -18,7 +18,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import RNFS from 'react-native-fs';
 import Context from '../context/Context';
 
-const User = () => {
+const User = ({navigation}) => {
   const [socials, setSocials] = useState({});
   const [modalVisible, setModalVisible] = useState(false); //social modal
   const [projectModal, setProjectModal] = useState(false); //project add modal
@@ -194,6 +194,7 @@ const User = () => {
         <View>
           <Image style={[styles.image]} source={{uri: profile.profilePhoto}} />
           <Text
+            onPress={navigation.openDrawer}
             style={[
               {
                 textAlign: 'center',
