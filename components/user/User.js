@@ -549,35 +549,40 @@ const User = () => {
                 {
                   flex: 1,
                   backgroundColor: '#00000090',
-                  paddingHorizontal: 40,
+                  paddingHorizontal: 30,
                 },
               ]}>
-              <View style={[{backgroundColor: 'white'}]}>
+              <View style={[{backgroundColor: '#32C2E4', width: 300}]}>
                 <View
                   style={[
                     {
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      height: 200,
+                      height: 180,
                     },
                   ]}>
                   <Image
                     style={{
+                      resizeMode: 'stretch',
                       height: '100%',
                       width: '100%',
                     }}
                     source={{uri: openProject.imageUri}}></Image>
                 </View>
-                <View>
+                <View
+                  style={[
+                    {
+                      paddingHorizontal: 20,
+                    },
+                  ]}>
                   <Text
                     style={[
                       styles.inputTitle,
                       {
                         textAlign: 'center',
                         borderBottomWidth: 1,
-                        color: 'black',
-                        paddingBottom: 5,
-                        fontSize: 50,
+                        borderBottomColor: 'white',
+                        color: 'white',
+                        paddingBottom: 10,
+                        fontSize: 40,
                       },
                     ]}>
                     {openProject.title}
@@ -589,7 +594,7 @@ const User = () => {
                       styles.inputTitle,
                       {
                         textAlign: 'center',
-                        color: 'black',
+                        color: 'white',
                         fontSize: 20,
                         paddingHorizontal: 50,
                         marginTop: 30,
@@ -625,7 +630,7 @@ const User = () => {
                     <FontAwesome5
                       name={'angle-right'}
                       size={20}
-                      color={'#2FC1E4'}></FontAwesome5>
+                      color={'black'}></FontAwesome5>
                   </TouchableOpacity>
                 </View>
               </View>
