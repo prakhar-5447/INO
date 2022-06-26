@@ -14,6 +14,7 @@ import Signup from './components/auth/Signup';
 import auth from '@react-native-firebase/auth';
 import Profile from './components/user/Profile';
 import Data from './components/context/Data';
+import ViewUser from './components/user/ViewUser';
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,7 @@ const App = () => {
           <Stack.Screen name="Signup" component={Signup}></Stack.Screen>
           <Stack.Screen name="Login" component={Login}></Stack.Screen>
           <Stack.Screen name="Profile" component={Profile}></Stack.Screen>
+          <Stack.Screen name="View" component={ViewUser}></Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
     </Data>
