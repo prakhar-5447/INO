@@ -17,6 +17,7 @@ import React, {useState, useEffect, useContext} from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import RNFS from 'react-native-fs';
 import Context from '../context/Context';
+import {useIsFocused} from '@react-navigation/native';
 
 const User = ({navigation}) => {
   const [socials, setSocials] = useState({});
@@ -32,6 +33,7 @@ const User = ({navigation}) => {
   });
   const [filePath, setFilePath] = useState(null);
   const {get_data, profile, platform, project} = useContext(Context);
+  const isFocused = useIsFocused();
 
   const set_social = () => {
     firestore()
