@@ -79,12 +79,66 @@ const ViewUser = ({navigation, route}) => {
                 ]}>
                 <Text style={[styles.titles, {marginRight: 5}]}>Socials</Text>
               </View>
-              <View style={[styles.links]}>
-                <Text style={[styles.link]}>Instagram</Text>
-                <Text style={[styles.link]}>Twitter</Text>
-                <Text style={[styles.link]}>Github</Text>
-                <Text style={[styles.link]}>Linkedin</Text>
-              </View>
+              {user.platform && (
+                <View style={[styles.links]}>
+                  <Text
+                    onPress={() => {
+                      if (user.platform['instagram']) {
+                        Linking.openURL(user.platform['instagram']);
+                      }
+                    }}
+                    style={[
+                      styles.link,
+                      {
+                        color: user.platform['instagram']
+                          ? 'black'
+                          : 'lightgray',
+                      },
+                    ]}>
+                    Instagram
+                  </Text>
+                  <Text
+                    onPress={() => {
+                      if (user.platform['twitter']) {
+                        Linking.openURL(user.platform['twitter']);
+                      }
+                    }}
+                    style={[
+                      styles.link,
+                      {color: user.platform['twitter'] ? 'black' : 'lightgray'},
+                    ]}>
+                    Twitter
+                  </Text>
+                  <Text
+                    onPress={() => {
+                      if (user.platform['github']) {
+                        Linking.openURL(user.platform['github']);
+                      }
+                    }}
+                    style={[
+                      styles.link,
+                      {color: user.platform['github'] ? 'black' : 'lightgray'},
+                    ]}>
+                    Github
+                  </Text>
+                  <Text
+                    onPress={() => {
+                      if (user.platform['linkedin']) {
+                        Linking.openURL(user.platform['linkedin']);
+                      }
+                    }}
+                    style={[
+                      styles.link,
+                      {
+                        color: user.platform['linkedin']
+                          ? 'black'
+                          : 'lightgray',
+                      },
+                    ]}>
+                    Linkedin
+                  </Text>
+                </View>
+              )}
             </View>
             <View>
               <Image style={[styles.image]} source={{uri: user.profilePhoto}} />
@@ -158,12 +212,42 @@ const ViewUser = ({navigation, route}) => {
             </View>
             <View>
               <Text style={[styles.titles, {textAlign: 'right'}]}>Links</Text>
-              <View style={[styles.others]}>
-                <Text style={[styles.link, {textAlign: 'right'}]}>
-                  Portfolio
-                </Text>
-                <Text style={[styles.link, {textAlign: 'right'}]}>Other</Text>
-              </View>
+              {user.platform && (
+                <View style={[styles.others]}>
+                  <Text
+                    onPress={() => {
+                      if (user.platform['portfolio']) {
+                        Linking.openURL(user.platform['portfolio']);
+                      }
+                    }}
+                    style={[
+                      styles.link,
+                      {
+                        textAlign: 'right',
+                        color: user.platform['portfolio']
+                          ? 'black'
+                          : 'lightgray',
+                      },
+                    ]}>
+                    Portfolio
+                  </Text>
+                  <Text
+                    onPress={() => {
+                      if (user.platform['other']) {
+                        Linking.openURL(user.platform['other']);
+                      }
+                    }}
+                    style={[
+                      styles.link,
+                      {
+                        textAlign: 'right',
+                        color: user.platform['other'] ? 'black' : 'lightgray',
+                      },
+                    ]}>
+                    Other
+                  </Text>
+                </View>
+              )}
             </View>
           </View>
           <View
@@ -399,7 +483,6 @@ const styles = StyleSheet.create({
   link: {
     fontFamily: 'AlegreyaSansSC-Regular',
     fontSize: 18,
-    color: 'black',
   },
   others: {
     borderRightWidth: 1.5,
