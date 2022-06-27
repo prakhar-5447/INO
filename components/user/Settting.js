@@ -47,12 +47,12 @@ const Settting = ({navigation}) => {
 
   const _chooseFile = async () => {
     // Opening Document Picker to select one file
-    setlLoading(true);
     try {
       const fileDetails = await DocumentPicker.pick({
         // Provide which type of file you want user to pick
         type: [DocumentPicker.types.allFiles],
       });
+      setlLoading(true);
       console.log('fileDetails : ' + JSON.stringify(fileDetails));
       // Setting the state for selected File
       setFilePath(fileDetails[0]);
