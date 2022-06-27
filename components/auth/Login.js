@@ -2,11 +2,11 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   TextInput,
   ImageBackground,
   TouchableOpacity,
   Alert,
+  Modal,
 } from 'react-native';
 import React, {useState} from 'react';
 import auth from '@react-native-firebase/auth';
@@ -14,31 +14,27 @@ import auth from '@react-native-firebase/auth';
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setlLoading] = useState(false);
 
   const login_auth = () => {
+    setlLoading(true);
     auth()
       .signInWithEmailAndPassword(email, password)
       .then(userCredential => {
         // Signed in
         const user = userCredential.user;
         console.log('logged in with :', auth().currentUser.email);
+        setlLoading(false);
         navigation.replace('Profile');
       })
       .catch(error => {
         // createTwoButtonAlert()
+        setPassword('');
+        setlLoading(false);
         const errorCode = error.code;
         alert(error.message);
       });
   };
-
-  const createTwoButtonAlert = () =>
-    Alert.alert('Try Again', 'Invalid Email or Password', [
-      {
-        text: 'Dismiss',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-    ]);
 
   return (
     <ImageBackground
@@ -108,6 +104,24 @@ const Login = ({navigation}) => {
           Sign Up
         </Text>
       </Text>
+      {loading && (
+        <View style={[styles.centeredView]}>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={loading}
+            onRequestClose={() => {}}>
+            <View
+              style={[
+                {
+                  flex: 1,
+                  backgroundColor: '#00000090',
+                  paddingHorizontal: 30,
+                },
+              ]}></View>
+          </Modal>
+        </View>
+      )}
     </ImageBackground>
   );
 };

@@ -38,6 +38,7 @@ const Signup = ({navigation}) => {
   }, [displayName, email, password, cpassword]);
 
   const signup_auth = (file_name, ext) => {
+    setlLoading(true);
     auth()
       .createUserWithEmailAndPassword(email, password)
       .then(userCredential => {
@@ -67,6 +68,8 @@ const Signup = ({navigation}) => {
       })
       .catch(error => {
         setlLoading(false);
+        setPassword('');
+        setCpassword('');
         var desertRef = storage().refFromURL(
           `https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2FProfilePhoto%2F${file_name}.${ext}?alt=media`,
         );
@@ -266,6 +269,24 @@ const Signup = ({navigation}) => {
           Login
         </Text>
       </Text>
+      {loading && (
+        <View style={[styles.centeredView]}>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={loading}
+            onRequestClose={() => {}}>
+            <View
+              style={[
+                {
+                  flex: 1,
+                  backgroundColor: '#00000090',
+                  paddingHorizontal: 30,
+                },
+              ]}></View>
+          </Modal>
+        </View>
+      )}
     </ImageBackground>
   );
 };
