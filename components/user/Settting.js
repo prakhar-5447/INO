@@ -50,7 +50,7 @@ const Settting = ({navigation}) => {
     try {
       const fileDetails = await DocumentPicker.pick({
         // Provide which type of file you want user to pick
-        type: [DocumentPicker.types.allFiles],
+        type: [DocumentPicker.types.images],
       });
       setlLoading(true);
       console.log('fileDetails : ' + JSON.stringify(fileDetails));

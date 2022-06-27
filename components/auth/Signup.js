@@ -6,6 +6,7 @@ import {
   TextInput,
   ImageBackground,
   TouchableOpacity,
+  Modal
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import firestore from '@react-native-firebase/firestore';
@@ -86,7 +87,7 @@ const Signup = ({navigation}) => {
     try {
       const fileDetails = await DocumentPicker.pick({
         // Provide which type of file you want user to pick
-        type: [DocumentPicker.types.allFiles],
+        type: [DocumentPicker.types.images],
       });
       console.log('fileDetails : ' + JSON.stringify(fileDetails));
       // Setting the state for selected File

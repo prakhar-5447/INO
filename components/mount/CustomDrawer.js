@@ -9,6 +9,7 @@ import Context from '../context/Context';
 
 const CustomDrawer = props => {
   const {profile} = useContext(Context);
+
   const logOut = () => {
     props.navigation.replace('Login');
     auth()
@@ -18,6 +19,7 @@ const CustomDrawer = props => {
       })
       .catch(error => {
         // An error happened.
+        props.navigation.replace('Profile');
         const errorCode = error.code;
         alert(error.message);
       });

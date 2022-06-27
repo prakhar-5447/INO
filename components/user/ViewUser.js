@@ -67,7 +67,7 @@ const ViewUser = ({navigation, route}) => {
           source={require('../../assets/image/followed_bg.jpg')}
           resizeMode="cover"
           blurRadius={10}
-          style={[{flex: 1}]}>
+          style={[]}>
           <View style={[styles.header]}>
             <View>
               <View

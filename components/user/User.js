@@ -79,7 +79,7 @@ const User = ({navigation}) => {
     try {
       const fileDetails = await DocumentPicker.pick({
         // Provide which type of file you want user to pick
-        type: [DocumentPicker.types.allFiles],
+        type: [DocumentPicker.types.images],
       });
       console.log('fileDetails : ' + JSON.stringify(fileDetails));
       // Setting the state for selected File
