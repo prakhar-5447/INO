@@ -46,6 +46,7 @@ const Search = ({navigation}) => {
 
   useEffect(() => {
     fetchAll();
+    navigation.closeDrawer();
   }, [isFocused]);
 
   return (

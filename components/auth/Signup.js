@@ -6,6 +6,7 @@ import {
   TextInput,
   ImageBackground,
   TouchableOpacity,
+  Modal
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import firestore from '@react-native-firebase/firestore';
@@ -37,7 +38,8 @@ const Signup = ({navigation}) => {
     }
   }, [displayName, email, password, cpassword]);
 
-  const signup_auth = (file_name, ext) => {
+  const signup_auth = (file_name,timestamp, ext) => {
+    setlLoading(true);
     auth()
       .createUserWithEmailAndPassword(email, password)
       .then(userCredential => {
@@ -57,7 +59,7 @@ const Signup = ({navigation}) => {
             platform: {},
             project: [],
             followed: [],
-            profilePhoto: `https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2FProfilePhoto%2F${file_name}.${ext}?alt=media`,
+            profilePhoto: `https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2FProfilePhoto%2F${file_name}-${timestamp}.${ext}?alt=media`,
           })
           .then(() => {
             console.log('User added!');
@@ -67,8 +69,10 @@ const Signup = ({navigation}) => {
       })
       .catch(error => {
         setlLoading(false);
+        setPassword('');
+        setCpassword('');
         var desertRef = storage().refFromURL(
-          `https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2FProfilePhoto%2F${file_name}.${ext}?alt=media`,
+          `https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2FProfilePhoto%2F${file_name}-${timestamp}.${ext}?alt=media`,
         );
 
         // Delete the file
@@ -83,7 +87,7 @@ const Signup = ({navigation}) => {
     try {
       const fileDetails = await DocumentPicker.pick({
         // Provide which type of file you want user to pick
-        type: [DocumentPicker.types.allFiles],
+        type: [DocumentPicker.types.images],
       });
       console.log('fileDetails : ' + JSON.stringify(fileDetails));
       // Setting the state for selected File
@@ -102,6 +106,7 @@ const Signup = ({navigation}) => {
   const _uploadFile = async e => {
     try {
       setlLoading(true);
+      const timestamp = new Date().getTime();
 
       // Check if file selected
       console.log(filePath);
@@ -111,7 +116,7 @@ const Signup = ({navigation}) => {
       var ext = filePath.name.substr(filePath.name.lastIndexOf('.') + 1);
       var file_name = email.slice(0, email.lastIndexOf('@'));
       const reference = storage().ref(
-        `/myFiles/ProfilePhoto/${file_name}.${ext}`,
+        `/myFiles/ProfilePhoto/${file_name}-${timestamp}.${ext}`,
       );
 
       //Put File
@@ -124,7 +129,7 @@ const Signup = ({navigation}) => {
         );
       });
       task.then(() => {
-        signup_auth(file_name, ext);
+        signup_auth(file_name,timestamp, ext);
         setFilePath(null);
       });
     } catch (error) {
@@ -266,6 +271,24 @@ const Signup = ({navigation}) => {
           Login
         </Text>
       </Text>
+      {loading && (
+        <View style={[styles.centeredView]}>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={loading}
+            onRequestClose={() => {}}>
+            <View
+              style={[
+                {
+                  flex: 1,
+                  backgroundColor: '#00000090',
+                  paddingHorizontal: 30,
+                },
+              ]}></View>
+          </Modal>
+        </View>
+      )}
     </ImageBackground>
   );
 };

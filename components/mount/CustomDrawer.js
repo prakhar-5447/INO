@@ -7,17 +7,19 @@ import {
 import auth from '@react-native-firebase/auth';
 import Context from '../context/Context';
 
-const CustomDrawer = (props, {navigation}) => {
+const CustomDrawer = props => {
   const {profile} = useContext(Context);
+
   const logOut = () => {
+    props.navigation.replace('Login');
     auth()
       .signOut()
       .then(() => {
         console.log('Logged out');
-        navigation.replace('Login');
       })
       .catch(error => {
         // An error happened.
+        props.navigation.replace('Profile');
         const errorCode = error.code;
         alert(error.message);
       });

@@ -26,6 +26,7 @@ const Followed = ({navigation}) => {
 
   useEffect(() => {
     fetch();
+    navigation.closeDrawer();
   }, [isFocused]);
 
   return (

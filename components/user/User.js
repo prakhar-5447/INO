@@ -79,7 +79,7 @@ const User = ({navigation}) => {
     try {
       const fileDetails = await DocumentPicker.pick({
         // Provide which type of file you want user to pick
-        type: [DocumentPicker.types.allFiles],
+        type: [DocumentPicker.types.images],
       });
       console.log('fileDetails : ' + JSON.stringify(fileDetails));
       // Setting the state for selected File
@@ -155,7 +155,8 @@ const User = ({navigation}) => {
 
   useEffect(() => {
     get_data();
-  }, []);
+    navigation.closeDrawer();
+  }, [isFocused]);
 
   return (
     <View
@@ -186,12 +187,58 @@ const User = ({navigation}) => {
                 color={'#2FC1E4'}></FontAwesome5>
             </TouchableOpacity>
           </View>
-          <View style={[styles.links]}>
-            <Text style={[styles.link]}>Instagram</Text>
-            <Text style={[styles.link]}>Twitter</Text>
-            <Text style={[styles.link]}>Github</Text>
-            <Text style={[styles.link]}>Linkedin</Text>
-          </View>
+          {platform && (
+            <View style={[styles.links]}>
+              <Text
+                onPress={() => {
+                  if (platform['instagram']) {
+                    Linking.openURL(platform['instagram']);
+                  }
+                }}
+                style={[
+                  styles.link,
+                  {color: platform['instagram'] ? 'black' : 'lightgray'},
+                ]}>
+                Instagram
+              </Text>
+              <Text
+                onPress={() => {
+                  if (platform['twitter']) {
+                    Linking.openURL(platform['twitter']);
+                  }
+                }}
+                style={[
+                  styles.link,
+                  {color: platform['twitter'] ? 'black' : 'lightgray'},
+                ]}>
+                Twitter
+              </Text>
+              <Text
+                onPress={() => {
+                  if (platform['github']) {
+                    Linking.openURL(platform['github']);
+                  }
+                }}
+                style={[
+                  styles.link,
+                  {color: platform['github'] ? 'black' : 'lightgray'},
+                ]}>
+                Github
+              </Text>
+              <Text
+                onPress={() => {
+                  if (platform['linkedin']) {
+                    Linking.openURL(platform['linkedin']);
+                  }
+                }}
+                style={[
+                  styles.link,
+                  {color: platform['linkedin'] ? 'black' : 'lightgray'},
+                ]}>
+                Linkedin
+              </Text>
+            </View>
+          )}
         </View>
         <View>
           <Image style={[styles.image]} source={{uri: profile.profilePhoto}} />
@@ -210,10 +257,40 @@ const User = ({navigation}) => {
         </View>
         <View>
           <Text style={[styles.titles, {textAlign: 'right'}]}>Links</Text>
-          <View style={[styles.others]}>
-            <Text style={[styles.link, {textAlign: 'right'}]}>Portfolio</Text>
-            <Text style={[styles.link, {textAlign: 'right'}]}>Other</Text>
-          </View>
+          {platform && (
+            <View style={[styles.others]}>
+              <Text
+                onPress={() => {
+                  if (platform['portfolio']) {
+                    Linking.openURL(platform['portfolio']);
+                  }
+                }}
+                style={[
+                  styles.link,
+                  {
+                    textAlign: 'right',
+                    color: platform['portfolio'] ? 'black' : 'lightgray',
+                  },
+                ]}>
+                Portfolio
+              </Text>
+              <Text
+                onPress={() => {
+                  if (platform['other']) {
+                    Linking.openURL(platform['other']);
+                  }
+                }}
+                style={[
+                  styles.link,
+                  {
+                    textAlign: 'right',
+                    color: platform['other'] ? 'black' : 'lightgray',
+                  },
+                ]}>
+                Other
+              </Text>
+            </View>
+          )}
         </View>
       </View>
       <View
@@ -668,7 +745,6 @@ const styles = StyleSheet.create({
   link: {
     fontFamily: 'AlegreyaSansSC-Regular',
     fontSize: 18,
-    color: 'black',
   },
   others: {
     borderRightWidth: 1.5,
