@@ -156,7 +156,7 @@ const User = ({navigation}) => {
   useEffect(() => {
     get_data();
     navigation.closeDrawer();
-  }, []);
+  }, [isFocused]);
 
   return (
     <View
