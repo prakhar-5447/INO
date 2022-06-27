@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import {StyleSheet, Text, View} from 'react-native';
+import React from 'react';
+import {useIsFocused} from '@react-navigation/native';
 
 const Settting = () => {
-
+  const IsFocused = useIsFocused();
   const _chooseFile = async () => {
     // Opening Document Picker to select one file
     try {
@@ -82,13 +83,17 @@ const Settting = () => {
     }
   };
 
+  useEffect(() => {
+    navigation.closeDrawer();
+  }, [IsFocused]);
+
   return (
     <View>
       <Text>Settting</Text>
     </View>
-  )
-}
+  );
+};
 
-export default Settting
+export default Settting;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

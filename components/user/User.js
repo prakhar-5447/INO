@@ -155,6 +155,7 @@ const User = ({navigation}) => {
 
   useEffect(() => {
     get_data();
+    navigation.closeDrawer();
   }, []);
 
   return (
