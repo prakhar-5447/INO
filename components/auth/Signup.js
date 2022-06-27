@@ -37,7 +37,7 @@ const Signup = ({navigation}) => {
     }
   }, [displayName, email, password, cpassword]);
 
-  const signup_auth = (file_name, ext) => {
+  const signup_auth = (file_name,timestamp, ext) => {
     setlLoading(true);
     auth()
       .createUserWithEmailAndPassword(email, password)
@@ -58,7 +58,7 @@ const Signup = ({navigation}) => {
             platform: {},
             project: [],
             followed: [],
-            profilePhoto: `https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2FProfilePhoto%2F${file_name}.${ext}?alt=media`,
+            profilePhoto: `https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2FProfilePhoto%2F${file_name}-${timestamp}.${ext}?alt=media`,
           })
           .then(() => {
             console.log('User added!');
@@ -71,7 +71,7 @@ const Signup = ({navigation}) => {
         setPassword('');
         setCpassword('');
         var desertRef = storage().refFromURL(
-          `https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2FProfilePhoto%2F${file_name}.${ext}?alt=media`,
+          `https://firebasestorage.googleapis.com/v0/b/ino-app-20b90.appspot.com/o/myFiles%2FProfilePhoto%2F${file_name}-${timestamp}.${ext}?alt=media`,
         );
 
         // Delete the file
@@ -105,6 +105,7 @@ const Signup = ({navigation}) => {
   const _uploadFile = async e => {
     try {
       setlLoading(true);
+      const timestamp = new Date().getTime();
 
       // Check if file selected
       console.log(filePath);
@@ -114,7 +115,7 @@ const Signup = ({navigation}) => {
       var ext = filePath.name.substr(filePath.name.lastIndexOf('.') + 1);
       var file_name = email.slice(0, email.lastIndexOf('@'));
       const reference = storage().ref(
-        `/myFiles/ProfilePhoto/${file_name}.${ext}`,
+        `/myFiles/ProfilePhoto/${file_name}-${timestamp}.${ext}`,
       );
 
       //Put File
@@ -127,7 +128,7 @@ const Signup = ({navigation}) => {
         );
       });
       task.then(() => {
-        signup_auth(file_name, ext);
+        signup_auth(file_name,timestamp, ext);
         setFilePath(null);
       });
     } catch (error) {
